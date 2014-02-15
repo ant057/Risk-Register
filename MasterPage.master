@@ -1,0 +1,49 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Risk Register</title>
+
+    <asp:ContentPlaceHolder id="head" runat="server">
+
+    </asp:ContentPlaceHolder>
+
+    <link href=jquery-ui.css rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src=jquery.min.js></script>
+    <script src=jquery-ui.min.js></script>
+
+</head>
+
+<body style="height: 173px;">
+    <form id="form1" runat="server">
+            <div style="height: 176px">
+        &nbsp;<table &nbsp;<table align="left">
+                    <tr>
+                        <td colspan="4">
+        <img alt="" src="ArgoGroupColorWTagline.jpg" 
+            style="height: 100px; width: 406px" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/MasterDash.aspx">Risk Dashboard</asp:HyperLink>
+                        </td>
+                        <td>
+                            <asp:HyperLink ID="riskAssessmentLink" runat="server" 
+                                NavigateUrl="~/RiskAssessment.aspx">Risk Assessment</asp:HyperLink>
+                        </td>
+                        <td>
+                            <asp:HyperLink ID="riskRegisterLink" runat="server" 
+                                NavigateUrl="~/AggregatedScores.aspx">Aggregated Scores</asp:HyperLink>
+                        </td>
+                        <td>
+                            &nbsp;</td>
+                    </tr>
+                </table>
+            </div>
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">       
+        </asp:ContentPlaceHolder>
+    </form>
+</body>
+</html>

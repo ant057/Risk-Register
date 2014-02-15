@@ -1,0 +1,81 @@
+﻿body
+{
+    font-family: Verdana, Arial, Sans-Serif;
+    font-size: small;
+    background-color: #C0C0C0;
+}
+
+.Label
+{
+    font-family: 'Mongolian Baiti';
+    font-size: large;
+    font-weight: 100;
+    line-height: normal;
+    background-color: #FFFFFF;
+    border-color: #C0C0C0;
+}
+
+table
+{
+    border-style: outset;
+}
+
+.table_header
+	{
+		width:100%;
+		background-color:white;
+	}
+	
+.table_header_text
+	{
+	font-size:18pt;
+	font-weight:bold;
+	font-style:italic; 
+	vertical-align:middle;	
+	}	
+
+.table_list_holder
+	{
+		width:100%;
+    }	
+	
+.table_list
+	{
+		width:100%;
+		background-color:#EEEEEE;
+	}	
+
+.table_title
+	{
+	border-collapse:collapse;
+	background-color:#CCCCCC;
+	font-weight:bold;
+	border-left:.00cm solid #C3C3C3;
+	}
+
+.table_detail_grid
+	{
+	border-width: thin;
+    border-collapse:collapse;
+	background-color:#EEEEEE;
+	border-style:solid;
+
+}
+
+.table_detail_grid_tr
+	{
+	border-collapse:collapse;
+	background-color:#EEEEEE;
+	border-style:solid;
+	border: 1px solid CCCCCC;
+	border-bottom-width:thin;
+	border-left-width:thin;
+	border-right-width:thin;	
+	border-top-width:thin;
+	padding:2,2,2,2;
+	}
+	
+.table_detail_grid_td
+	{
+	border: 1px solid white;
+}

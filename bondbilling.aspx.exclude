@@ -1,0 +1,1446 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="bondbilling.aspx.cs" Inherits="bondbilling" %>
+
+<%@ Page Language="C#" MasterPageFile="~/AMS/Bonds/Bonds.master" AutoEventWireup="true"
+    CodeFile="BondBilling.aspx.cs" Inherits="AMS_Bonds_BondBilling" Title="Bond - Billing Details" %>
+<%@ Register TagPrefix="cc2" Namespace="RomaworksWeb.UI.DataGrid" Assembly="rwDataGrid" %>
+<%@ Register TagPrefix="uc1" TagName="BondInformation" Src="BondInformation.ascx" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <link href="/style.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" src="/javascript/calendar.js"></script>
+    <script language="javascript" type="text/javascript" src="/javascript/calendar-en.js"></script>
+    <script language="javascript" type="text/javascript" src="/javascript/calendar-setup.js"></script>
+    <script language="javascript" type="text/javascript" src="/javascript/Functions.js"></script>
+    <script language="javascript" type="text/javascript" src="/Javascript/Validations.js"></script>
+
+    <script language="javascript" type="text/javascript">
+
+        function CalculateAdjustedPremium() {
+            var bondamount = document.getElementById("<%=txtbondAmount.ClientID%>").value;
+            bondamount = bondamount.replace(',', '');
+            bondamount = bondamount.replace(',', '');
+            bondamount = bondamount.replace(',', '');
+            bondamount = bondamount.replace(',', '');
+            bondamount = bondamount.replace(',', '');
+            bondamount = bondamount.replace(',', '');
+            bondamount = bondamount.replace(',', '');
+            bondamount = bondamount.replace(',', '');
+            var adjPremiumrate = document.getElementById("<%=txtAdJustedRate.ClientID%>").value;
+            adjPremiumrate = adjPremiumrate.replace(',', '');
+            adjPremiumrate = adjPremiumrate.replace(',', '');
+            adjPremiumrate = adjPremiumrate.replace(',', '');
+            adjPremiumrate = adjPremiumrate.replace(',', '');
+
+            if (adjPremiumrate == "") {
+                alert('Please enter adjusted rate');
+                document.getElementById("<%=txtAdJustedRate.ClientID%>").focus();
+                return false;
+            }
+
+            var PremiumCommission = document.getElementById("<%=txtCommission.ClientID%>").value;
+            document.getElementById("<%=txtAdjustedPremium.ClientID%>").value = "";
+            document.getElementById("<%=txtAdjustedPremium.ClientID%>").value = roundNumber(((adjPremiumrate / 100) * bondamount), 2);
+
+            if (PremiumCommission != 0) {
+                var gwPremium = document.getElementById("<%=txtAdjustedPremium.ClientID%>").value;
+                document.getElementById("<%=txtadjustedCommission.ClientID%>").value = "";
+                document.getElementById("<%=txtadjustedCommission.ClientID%>").value = roundNumber(gwPremium * (PremiumCommission / 100), 2);
+            }
+            else {
+                document.getElementById("<%=txtadjustedCommission.ClientID%>").value = "";
+                document.getElementById("<%=txtadjustedCommission.ClientID%>").value = 0;
+            }
+        }
+
+        function onLossCostPremium() {
+            var gwPremium = document.getElementById("<%=txtGWPremium.ClientID%>").value;
+            if (gwPremium > 500) {
+                if (document.getElementById("<%=ddlPremiumType.ClientID%>").value == "2") {
+                    alert('You are not allowed to select the Loss Cost Option. (Premium is >500)');
+                    document.getElementById("<%=ddlPremiumType.ClientID%>").value = "1"
+                    document.getElementById("<%=ddlPremiumType.ClientID%>").focus();
+                    return false;
+                }
+                else {
+                    document.getElementById("<%=trChkManualAdjust.ClientID%>").style.display = 'none';
+                    document.getElementById("<%=txtAdjustedPremium.ClientID%>").value = "";
+                    document.getElementById("<%=txtAdJustedRate.ClientID%>").value = "";
+                    document.getElementById("<%=txtadjustedCommission.ClientID%>").value =
+            document.getElementById("<%=txtadjustedCommission.ClientID%>").value = "";
+                    document.getElementById("<%=Bondsnote.ClientID%>").value = "";
+                }
+            }
+            else {
+                if (document.getElementById("<%=ddlPremiumType.ClientID%>").value == "2") {
+                    document.getElementById("<%=trChkManualAdjust.ClientID%>").style.display = 'block';
+                    document.getElementById("<%=rwadjrate.ClientID%>").style.display = 'block';
+                    document.getElementById("<%=rwadjPremium.ClientID%>").style.display = 'block';
+                    document.getElementById("<%=rwnote.ClientID%>").style.display = 'block';
+                    document.getElementById("<%=rwadjCommission.ClientID%>").style.display = 'block';
+                    document.getElementById("<%=chkManualadjust.ClientID%>").checked = true
+                    document.getElementById("<%=txtAdJustedRate.ClientID%>").value = "";
+                    document.getElementById("<%=txtAdjustedPremium.ClientID%>").value = "";
+                    document.getElementById("<%=txtadjustedCommission.ClientID%>").value =
+            document.getElementById("<%=txtadjustedCommission.ClientID%>").value = "";
+                    document.getElementById("<%=Bondsnote.ClientID%>").value = "";
+                    return false;
+                }
+                else {
+                    document.getElementById("<%=rwadjrate.ClientID%>").style.display = 'none';
+                    document.getElementById("<%=rwadjPremium.ClientID%>").style.display = 'none';
+                    document.getElementById("<%=rwnote.ClientID%>").style.display = 'none';
+                    document.getElementById("<%=rwadjCommission.ClientID%>").style.display = 'none';
+                    document.getElementById("<%=chkManualadjust.ClientID%>").checked = false
+                    document.getElementById("<%=trChkManualAdjust.ClientID%>").style.display = 'none';
+                }
+            }
+        }
+
+        function adjustpremium() {
+            if (document.getElementById("<%=chkManualadjust.ClientID%>").checked == true) {
+                document.getElementById("<%=rwadjrate.ClientID%>").style.display = 'block';
+                document.getElementById("<%=rwadjPremium.ClientID%>").style.display = 'block';
+                document.getElementById("<%=rwnote.ClientID%>").style.display = 'block';
+                document.getElementById("<%=rwadjCommission.ClientID%>").style.display = 'block';
+                document.getElementById("<%=chkManualadjust.ClientID%>").checked == true
+                document.getElementById("<%=txtAdJustedRate.ClientID%>").value = "";
+                document.getElementById("<%=txtAdjustedPremium.ClientID%>").value = "";
+                document.getElementById("<%=txtadjustedCommission.ClientID%>").value =
+        document.getElementById("<%=txtadjustedCommission.ClientID%>").value = "";
+                document.getElementById("<%=Bondsnote.ClientID%>").value = "";
+            }
+            else {
+                document.getElementById("<%=rwadjrate.ClientID%>").style.display = 'none';
+                document.getElementById("<%=rwadjPremium.ClientID%>").style.display = 'none';
+                document.getElementById("<%=rwnote.ClientID%>").style.display = 'none';
+                document.getElementById("<%=rwadjCommission.ClientID%>").style.display = 'none';
+                document.getElementById("<%=chkManualadjust.ClientID%>").checked == false
+                document.getElementById("<%=txtAdJustedRate.ClientID%>").value = "";
+                document.getElementById("<%=txtAdjustedPremium.ClientID%>").value = "";
+                document.getElementById("<%=txtadjustedCommission.ClientID%>").value = "";
+                document.getElementById("<%=Bondsnote.ClientID%>").value = "";
+            }
+        }
+
+        function SetRate() {
+            var clientID = '<%= rdbRateCategory.ClientID %>';
+
+            for (i = 0; i < '<%= rdbRateCategory.Items.Count %>'; i++) {
+                if (document.getElementById(clientID + "_" + i.toString()).checked) {
+                    document.getElementById("<%=txtBondRate.ClientID%>").value = document.getElementById(clientID + "_" + i.toString()).value;
+                    //there are 2 different commissions depending on the rate selected
+                    if (i == 0 || i == 1) {
+                        document.getElementById("<%=txtCommission.ClientID%>").value = document.getElementById("<%=hdnAccountCommission.ClientID%>").value;
+                    }
+                    else {
+                        document.getElementById("<%=txtCommission.ClientID%>").value = document.getElementById("<%=hdnIndividualCommission.ClientID%>").value;
+                    }
+                    break;
+                }
+            }
+        }
+
+        function addYear() {
+            if ((document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_0").checked == true) || (document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_1").checked == true) || (document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_2").checked == true)) {
+                if (document.getElementById("<%=txtEffectivedt.ClientID%>").value == "") {
+                    document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_0").checked = false
+                    document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_1").checked = false
+                    document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_2").checked = false
+                    alert('Please select effective date');
+                    return false;
+                }
+                else {
+                    var fDate = new Date(document.getElementById("<%=txtEffectivedt.ClientID%>").value);
+                    fDate.setDate(fDate.getDate() + 365);
+                    var MM = fDate.getMonth() + 1;
+                    var DD = fDate.getDate();
+                    var YY = fDate.getFullYear();
+                    if (MM < 10) MM = "0" + MM;
+                    if (DD < 10) DD = "0" + DD;
+                    document.getElementById("<%=txtExpiryDt.ClientID%>").value = MM + "/" + DD + "/" + YY;
+                }
+            }
+        }
+
+        function showPremium() {
+            var msg = "";
+            var flag = "0";
+
+            if (document.getElementById("<%=txtbondAmount.ClientID%>").value == "") {
+                msg = "bond amount is required field  \n";
+                flag = "1";
+            }
+
+            if ((document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_0").checked == false) && (document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_1").checked == false) && (document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_2").checked == false)) {
+                msg = msg + "Bond term is required field  \n";
+                flag = "1";
+            }
+
+            if (document.getElementById("<%=txtEffectivedt.ClientID%>").value == "") {
+                msg = msg + "Effective date is required field  \n";
+                flag = "1";
+            }
+
+            if (document.getElementById("<%=hdnRenewEndorse.ClientID%>").value == "Endorse" && document.getElementById("<%=txtEndorsementEffectiveDate.ClientID%>").value != "") {
+                var dt3 = document.getElementById("<%=txtEndorsementEffectiveDate.ClientID%>");
+                if (CheckDate(dt3.value) == false) {
+                    msg = msg + "Endorsement Effective date is in an invalid format. mm/dd/yyyy  \n";
+                    flag = "1";
+                }
+            }
+
+            if (document.getElementById("<%=hdnRenewEndorse.ClientID%>").value == "Endorse" && document.getElementById("<%=txtEndorsementEffectiveDate.ClientID%>").value == "") {
+                msg = msg + "Endorsement Effective Date is a required field \n";
+                flag = "1";
+            }
+
+
+            if ((document.getElementById("<%=hdnRenewEndorse.ClientID%>").value == "Cancel")) {
+                if (document.getElementById("<%=txtEndorsementEffectiveDate.ClientID%>").value == "") {
+                    msg = msg + "Cancel date is required field  \n";
+                    flag = "1";
+                }
+            }
+
+            var dt = document.getElementById("<%=txtEffectivedt.ClientID%>");
+            if (CheckDate(dt.value) == false) {
+                msg = msg + "Effective date is in an invalid format. mm/dd/yyyy  \n";
+                flag = "1";
+            }
+
+            var dt1 = document.getElementById("<%=txtExpiryDt.ClientID%>");
+            if (document.getElementById("<%=txtExpiryDt.ClientID%>").value != "") {
+                if (CheckDate(dt1.value) == false) {
+                    msg = msg + "Expiration date is in an invalid format. mm/dd/yyyy  \n";
+                    flag = "1";
+                }
+            }
+            else {
+                msg = msg + "Expiration date is required field  \n";
+                flag = "1";
+            }
+
+            if (document.getElementById("<%=txtbiddate.ClientID%>").value != "") {
+                var dtBid = document.getElementById("<%=txtbiddate.ClientID%>");
+                if (CheckDate(dtBid.value) == false) {
+                    msg = msg + "Bid date is in an invalid format. mm/dd/yyyy  \n";
+                    flag = "1";
+                }
+            }
+
+            if (document.getElementById("<%=chkBillCancellation.ClientID%>").checked == true) {
+                if (document.getElementById("<%=txtNoOfDays.ClientID%>").value == "") {
+                    msg = msg + "no of days is required field  \n";
+                    flag = "1";
+                }
+            }
+
+            if (flag == "1") {
+                alert(msg);
+                return false;
+            }
+        }
+
+        function CalculateCommission() {
+            var GWPremium = removeCurrencyAttributes(document.getElementById("<%=txtGWPremium.ClientID%>").value);
+            var CommissionPercent = removeCurrencyAttributes(document.getElementById("<%=txtCommission.ClientID%>").value);
+            var BusinessType = document.getElementById("<%=hdnBusinessType.ClientID%>").value;
+
+            if (BusinessType == "1") {
+                var CommissionPremium = parseFloat(GWPremium) * parseFloat(CommissionPercent / 100);
+                document.getElementById("<%=txtCommissionPremium.ClientID%>").value = CommissionPremium;
+                document.getElementById("<%=txtGWPremium.ClientID%>").value = formatNumber(document.getElementById("<%=txtGWPremium.ClientID%>").value, '#,###.00');
+                document.getElementById("<%=txtCommissionPremium.ClientID%>").value = formatNumber(document.getElementById("<%=txtCommissionPremium.ClientID%>").value, '#,###.00');
+            }
+        }
+
+        function CalculateEndorsementPremium() {
+            var BusinessType = document.getElementById("<%=hdnBusinessType.ClientID%>").value;
+
+            //Check to see if the entered values are valid dollar amounts
+            if (isMoney(document.getElementById("<%=txtEndorsedPremium.ClientID%>").value)) {
+                //Calculate the new Total Gross Written Premium
+                var GWPPremium = removeCurrencyAttributes(document.getElementById("<%=txtGWPremium.ClientID%>").value);
+                var endorsePremium = removeCurrencyAttributes(document.getElementById("<%=txtSystemEndorsementAmount.ClientID%>").value);
+                var changedEndorsedPremium = removeCurrencyAttributes(document.getElementById("<%=txtEndorsedPremium.ClientID%>").value)
+
+                //Calculate the new Total Premium
+                var calculatedNewPremium = parseFloat(GWPPremium) - parseFloat(endorsePremium) + parseFloat(changedEndorsedPremium);
+                document.getElementById("<%=txtGWPremium.ClientID%>").value = roundNumber(calculatedNewPremium, 2);
+                document.getElementById("<%=txtGWPremium.ClientID%>").value = formatNumber(document.getElementById("<%=txtGWPremium.ClientID%>").value, '#,###.00');
+
+                if (BusinessType == "1") {
+                    //Calculate the Total Commission
+                    var NewGWPremium = removeCurrencyAttributes(document.getElementById("<%=txtGWPremium.ClientID%>").value);
+                    var CommissionPercent = removeCurrencyAttributes(document.getElementById("<%=txtCommission.ClientID%>").value);
+                    var CommissionPremium = parseFloat(NewGWPremium) * parseFloat(CommissionPercent / 100);
+                    document.getElementById("<%=txtCommissionPremium.ClientID%>").value = CommissionPremium;
+                    document.getElementById("<%=txtCommissionPremium.ClientID%>").value = formatNumber(document.getElementById("<%=txtCommissionPremium.ClientID%>").value, '#,###.00');
+
+                    //Calculate the Endorsement Commission    
+                    var EndorsementCommissionPremium = parseFloat(changedEndorsedPremium) * parseFloat(CommissionPercent / 100);
+                    document.getElementById("<%=txtEndorsementCommissionAmount.ClientID%>").value = EndorsementCommissionPremium;
+                    document.getElementById("<%=txtEndorsementCommissionAmount.ClientID%>").value = formatNumber(document.getElementById("<%=txtEndorsementCommissionAmount.ClientID%>").value, '#,###.00');
+                }
+                else {
+                    //need to loop through the contract table to recalc contract commission
+                }
+                //Format the Endorsement Premium
+                document.getElementById("<%=txtEndorsedPremium.ClientID%>").value = formatNumber(document.getElementById("<%=txtEndorsedPremium.ClientID%>").value, '#,###.00');
+            }
+            else {
+                alert('Please enter a valid currency value in the Endorsement Premium field.');
+            }
+        }
+
+        //used for the manual changing of a contract commission
+        function CalculateContractCommissionChange() {
+            var BusinessType = document.getElementById("<%=hdnBusinessType.ClientID%>").value;
+            if (BusinessType != "1") {
+                var OriginalCommission = parseFloat(removeCurrencyAttributes(document.getElementById("<%=txtCommissionPremium.ClientID%>").value));
+                var EndorsementCommissionPremium = parseFloat(removeCurrencyAttributes(document.getElementById("<%=txtEndorsementCommissionAmount.ClientID%>").value));
+                var NewCommissionPremium = OriginalCommission + EndorsementCommissionPremium;
+                document.getElementById("<%=txtCommissionPremium.ClientID%>").value = NewCommissionPremium;
+                document.getElementById("<%=txtCommissionPremium.ClientID%>").value = formatNumber(document.getElementById("<%=txtCommissionPremium.ClientID%>").value, '#,###.##');
+                //                alert(OriginalCommission);
+                //                alert(EndorsementCommissionPremium);
+                //                alert(NewCommissionPremium);
+                //alert(formatNumber(document.getElementById("<%=txtCommissionPremium.ClientID%>").value, '#,###.##'));
+            }
+        }
+
+        function ValidationGenerateClose() {
+        }
+
+        function ValidationGenerateBilling() {
+            var msg = "";
+            var flag = "0";
+
+
+            if (document.getElementById("<%=hdnRenewEndorse.ClientID%>").value == "Endorse" && document.getElementById("<%=txtEndorsementEffectiveDate.ClientID%>").value != "") {
+                var dt3 = document.getElementById("<%=txtEndorsementEffectiveDate.ClientID%>");
+                if (CheckDate(dt3.value) == false) {
+                    msg = msg + "Endorsement Effective date is in an invalid format. mm/dd/yyyy  \n";
+                    flag = "1";
+                }
+            }
+
+            if (document.getElementById("<%=hdnRenewEndorse.ClientID%>").value == "Endorse" && document.getElementById("<%=txtEndorsementEffectiveDate.ClientID%>").value == "") {
+                msg = msg + "Endorsement Effective Date is a required field \n";
+                flag = "1";
+            }
+
+            if (document.getElementById("<%=hdnRenewEndorse.ClientID%>").value == "Cancel" && document.getElementById("<%=txtEndorsementEffectiveDate.ClientID%>").value == "") {
+                msg = msg + "Cancel Date is a required field \n";
+                flag = "1";
+            }
+
+            if (document.getElementById("<%=txtbondAmount.ClientID%>").value == "") {
+                msg = msg + "Bond Amount is a required field \n";
+                flag = "1";
+            }
+
+            if (document.getElementById("<%=hdnFeesRequired.ClientID%>").value == "1") {
+                msg = msg + "Bond Obligee Resides in a Fee State. Bond Fees are required \n";
+                flag = "1";
+            }
+
+            var dt = document.getElementById("<%=txtEffectivedt.ClientID%>");
+            if (CheckDate(dt.value) == false) {
+                msg = msg + "Effective date is in an invalid format. mm/dd/yyyy  \n";
+                flag = "1";
+            }
+
+            var dt1 = document.getElementById("<%=txtExpiryDt.ClientID%>");
+            if (document.getElementById("<%=txtExpiryDt.ClientID%>").value != "") {
+                if (CheckDate(dt1.value) == false) {
+                    msg = msg + "Expiration date is in an invalid format. mm/dd/yyyy  \n";
+                    flag = "1";
+                }
+            }
+            else {
+                msg = msg + "Expiration date is required field  \n";
+                flag = "1";
+            }
+
+            if ((document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_0").checked == false) && (document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_1").checked == false) && (document.getElementById("ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_radioTermlist_2").checked == false)) {
+                msg = msg + "Bond Term is a required field \n";
+                flag = "1";
+            }
+
+            if (document.getElementById("<%=chkBillCancellation.ClientID%>").checked == true) {
+                if (document.getElementById("<%=txtNoOfDays.ClientID%>").value == "") {
+                    msg = msg + " # Of Days is a required field \n";
+                    flag = "1";
+                }
+            }
+
+            if (document.getElementById("<%=ddlPremiumType.ClientID%>").value == "0") {
+                msg = msg + "Type is a required field \n";
+                flag = "1";
+            }
+
+            if (document.getElementById("<%=txtBondRate.ClientID%>").value == "") {
+                msg = msg + "Rate is a required field \n";
+                flag = "1";
+            }
+
+            if (document.getElementById("<%=txtGWPremium.ClientID%>").value == "") {
+                msg = msg + "GW Premium is a required field \n";
+                flag = "1";
+            }
+
+            if (document.getElementById("<%=txtCommission.ClientID%>").value == "") {
+                msg = msg + "Commission is a required field \n";
+                flag = "1";
+            }
+            else {
+                if (document.getElementById("<%=txtCommission.ClientID%>").value > 100) {
+                    msg = msg + "Commission%(<= 100) is a required field \n";
+                    flag = "1";
+                }
+            }
+
+            if (document.getElementById("<%=chkManualadjust.ClientID%>").checked == true) {
+                if (document.getElementById("<%=txtAdJustedRate.ClientID%>").value == "") {
+                    msg = msg + "Adjusted Rate is a required field \n";
+                    flag = "1";
+                }
+
+                if (document.getElementById("<%=txtAdjustedPremium.ClientID%>").value == "") {
+                    msg = msg + "Adjusted Premium is a required field \n";
+                    flag = "1";
+                }
+
+                if (document.getElementById("<%=txtadjustedCommission.ClientID%>").value == "") {
+                    msg = msg + "Adjusted Commission $ is a required field \n";
+                    flag = "1";
+                }
+
+                if (document.getElementById("<%=Bondsnote.ClientID%>").value == "") {
+                    msg = msg + "Note is a required field \n";
+                    flag = "1";
+                }
+            }
+
+            if (document.getElementById("<%=chkBulkBill.ClientID%>").checked == true) {
+                if (document.getElementById("<%=txtBStartDate.ClientID%>").value == "") {
+                    msg = msg + "Bulk Bill Start Date is a required field \n";
+                    flag = "1";
+                }
+
+                if (document.getElementById("<%=txtBEndDate.ClientID%>").value == "") {
+                    msg = msg + "Bulk Bill End Date is a required field \n";
+                    flag = "1";
+                }
+            }
+
+            if (flag == "1") {
+                alert(msg);
+                return false;
+            }
+        }
+
+        function ValidationFee() {
+            var msg = "";
+            var flag = "0";
+
+            if (document.getElementById("<%=txtAmount.ClientID%>").value == "") {
+                msg = "Please enter a fee amount \n";
+                flag = "1";
+            }
+
+            if (flag == "1") {
+                alert(msg);
+                return false;
+            }
+        }
+
+        function OpenContractDetails(BondID) {
+            window.open('/AMS/Bonds/ContractDetails.aspx?qryBondID=' + BondID, '', 'menubar=0,resizable=0,width=700,height=390,toolbar=0,scrollbars=yes');
+        }
+        //BondID, account, bondfronting, agency
+        function OpenFrontingBrokerDetails(BondID, aid, fcid, a) {
+            window.open('/AMS/Bonds/BondFrontingBroker.aspx?&qryAccountID=' + aid + '&id=' + BondID + '&fc=' + fcid + '&a=' + a, '', 'menubar=0,resizable=0,width=700,height=600,toolbar=0,scrollbars=yes');
+        }
+
+        function OpenCloseRpt(BondID, AID) {
+            window.open('BondClose.aspx?qryLoad=1&qryAccountID=' + AID + '&id=' + BondID, '', 'menubar=0,resizable=0,width=750,height=1024,toolbar=0,scrollbars=yes');
+        }
+
+        function FrontingSplit() {
+            var fc = document.getElementById("<%=txtFBrokerCommission.ClientID%>").value;
+            if (fc != "" && fc != "0") {
+                var splitpercent = 0;
+                var splitcomm = removeCurrencyAttributes(document.getElementById("<%=txtFBrokerCommission.ClientID%>").value);
+                var comm = removeCurrencyAttributes(document.getElementById("<%=txtCommissionPremium.ClientID%>").value);
+                comm = comm
+                splitpercent = parseFloat(splitcomm) / parseFloat(comm);
+                splitpercent = splitpercent * 100;
+                document.getElementById("<%=txtFCommSplit.ClientID%>").value = roundNumber(splitpercent, 2) + "%";
+            } else { document.getElementById("<%=txtFCommSplit.ClientID%>").value = "0 %"; }
+        }
+
+        function loadCalendarEndorseEffective() {
+            Calendar.setup({
+                inputField: "ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_txtEndorsementEffectiveDate",
+                ifFormat: "%m/%d/%Y",
+                button: "imgEndorsementEffectiveDate",
+                align: "Tl",
+                singleClick: true
+            });
+        }
+
+
+        function loadCalendarEffective() {
+            Calendar.setup({
+                inputField: "ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_txtEffectivedt",
+                ifFormat: "%m/%d/%Y",
+                button: "imgEffectivedt",
+                align: "Tl",
+                singleClick: true
+            });
+        }
+
+        function loadCalendarExpiry() {
+            Calendar.setup({
+                inputField: "ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_txtExpiryDt",
+                ifFormat: "%m/%d/%Y",
+                button: "imgExpiryDt",
+                align: "Tl",
+                singleClick: true
+            });
+        }
+
+        function loadCalendarBid() {
+            Calendar.setup({
+                inputField: "ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_txtbiddate",
+                ifFormat: "%m/%d/%Y",
+                button: "imgbiddate",
+                align: "Tl",
+                singleClick: true
+            });
+        }
+
+        function loadCalendarBillStartDate() {
+            Calendar.setup({
+                inputField: "ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_txtBStartDate",
+                ifFormat: "%m/%d/%Y",
+                button: "imgBStartDate",
+                align: "Tl",
+                singleClick: true
+            });
+        }
+
+        function loadCalendarBillEndDate() {
+            Calendar.setup({
+                inputField: "ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_txtBEndDate",
+                ifFormat: "%m/%d/%Y",
+                button: "imgBEndDate",
+                align: "Tl",
+                singleClick: true
+            });
+        }
+
+        function loadCalendarHistoricalRateDate() {
+            Calendar.setup({
+                inputField: "ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_txtHistoricalRateDate",
+                ifFormat: "%m/%d/%Y",
+                showsTime: true,
+                button: "imgHistoricalRateDate",
+                align: "Tl",
+                singleClick: true
+            });
+        }
+       
+   </script>
+    <asp:ScriptManager ID="FrontingScript" runat="server"></asp:ScriptManager>
+   <table cellpadding="4" class="table_list_holder" width="98%" align="center">
+        <tr>
+            <td colspan="2" valign="top">
+                <table border="0" cellspacing="0" class="table_header" width="100%">
+                    <tr>
+                        <td width="25%">
+                            <img alt="" src="/images/icons/Gear.gif" /><img alt="" src="/images/titles/Bonds.jpg" />
+                        </td>
+                        <td align="center" valign="middle" width="50%">
+                            <uc1:BondInformation ID="ucBondInformation" runat="server"></uc1:BondInformation>
+                        </td>
+                        <td align="right" width="25%">
+                            <asp:Button ID="btnNavigatePremium" runat="server" CssClass="flatbutton" OnClientClick="return showPremium();"
+                                Text="Calculate" OnClick="btnNavigatePremium_Click" />
+                            &nbsp;
+                            <asp:Button ID="btnSaveDraft" runat="server" Text="Save Draft" OnClientClick="return ValidationGenerateBilling();"
+                                OnClick="btnSaveDraft_Click" CssClass="flatbutton" />
+                            &nbsp;<asp:Button ID="Button2" runat="server" Text=" Generate Invoice" OnClientClick="return ValidationGenerateBilling();"
+                                OnClick="Button2_Click" CssClass="flatbutton" />&nbsp;<asp:Button ID="btnCloseLetter"
+                                    runat="server" Text=" Generate Close Letter" OnClientClick="return ValidationGenerateClose();"
+                                     CssClass="flatbutton" Visible="False" />&nbsp;
+                            <asp:Button ID="btnGenerateBilling" runat="server" Text=" Finish " OnClientClick="return ValidationGenerateBilling();"
+                                OnClick="btnGenerateBilling_Click" CssClass="flatbutton" Enabled="false" />
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" align="center">
+                            <asp:Label ID="lblmsg" runat="server" ForeColor="Red"></asp:Label>
+                            <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label>
+                            <asp:Label ID="lblMsgRate" runat="server" ForeColor="Red" Visible="False"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="50%">
+                <table border="1" cellpadding="0" cellspacing="0" class="table_title" width="100%">
+                    <tr>
+                        <td class="">
+                            &nbsp;Billing Details
+                            <asp:Label ID="lblBondNo2" runat="server" Visible="False"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+                <table cellpadding="2" class="table_detail_grid" width="100%">
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top" width="40%">
+                            <b>
+                            <img alt="" src="/images/icons/mandatory.gif" />Bond Currency / Rate</b></td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:DropDownList ID="ddlCurrencyFrom" runat="server" 
+                                Width="150px" AutoPostBack="True" 
+                                onselectedindexchanged="ddlCurrencyFrom_SelectedIndexChanged">
+                            </asp:DropDownList>
+                            <asp:DropDownList ID="ddlCurrencyTo" runat="server" 
+                                Width="150px" Visible="False">
+                            </asp:DropDownList>
+                            <asp:TextBox ID="txtFRate" runat="server" MaxLength="8"                                
+                                Style="text-align: right" Width="57px"></asp:TextBox>
+                           
+                            <asp:CheckBox ID="chkRateOverride" runat="server" Text="Rate Override" /> 
+
+                            &nbsp;&nbsp;<asp:HyperLink ID="hlHistoricalRate" runat="server" 
+                                NavigateUrl="http://finance.yahoo.com/currency-converter/#from=USD;to=EUR;amt=1" 
+                                Target="_blank">Historical Rate</asp:HyperLink>
+
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr id="trRateDate" runat="server">
+                        <td class="table_detail_grid_td" valign="top" width="40%">
+                            <b>&nbsp;&nbsp; Rate Date</b></td>
+                        <td class="table_detail_grid_td" colspan="1">
+
+                            <input id="txtHistoricalRateDate" runat="server" style="text-align: right" type="text" onclick="this.select();" /><img id="imgHistoricalRateDate" alt="" border="0" src="/images/calendarIcon.gif" style="cursor: hand;vertical-align: text-bottom" 
+                                onmouseover="loadCalendarHistoricalRateDate();" /></td>
+                    </tr>
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top" width="40%">
+                            <img alt="" src="/images/icons/mandatory.gif" /><b>Bond Amount</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:TextBox ID="txtbondAmount" runat="server" MaxLength="15" onclick="this.select();"
+                                onkeyup="formatMoney(this)" onchange="formatMoney(this)" onblur="if(this.value.indexOf('.')==-1)this.value=this.value+'.00'"
+                                Style="text-align: right">
+                            </asp:TextBox>
+                            <asp:Label ID="lblBondCurrencySymbol" runat="server">USD</asp:Label>
+                            <asp:TextBox ID="txtFbondAmount" runat="server" MaxLength="15" onclick="this.select();"
+                                onkeyup="formatMoney(this)" onchange="formatMoney(this)" onblur="if(this.value.indexOf('.')==-1)this.value=this.value+'.00'"
+                                Style="text-align: right" CssClass="textbox_invisible"></asp:TextBox>
+                <asp:Label ID="lblCurencySymbol" runat="server">USD</asp:Label>
+            &nbsp;<asp:HiddenField ID="hdnBondAmount" runat="server" />
+                        </td>
+                    </tr>
+                    <tr id="trContractAmount" runat="server">
+                        <td class="table_detail_grid_td" valign="top" width="40%">
+                            <b>Contract Amount</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:TextBox ID="txtContractBondAmount" runat="server" CssClass="textbox_invisible"
+                                MaxLength="15" onblur="if(this.value.indexOf('.')==-1)this.value=this.value+'.00'"
+                                onchange="formatMoney(this)" onclick="this.select();" onkeyup="formatMoney(this)"
+                                Style="text-align: right"></asp:TextBox>
+                            &nbsp; &nbsp;
+                            <asp:CheckBox ID="chkIsContractAmount" runat="server" Text=" Use Contract Amount"
+                                ToolTip="Override Bond amount and Calculate premium on Contract Amount" />
+                            <asp:Button ID="btnContractInfo" runat="server" CssClass="flatbutton" OnClick="btnContractInfo_Click"
+                                Text="Contract Info" Font-Size="XX-Small" />
+                        </td>
+                    </tr>
+                    <tr id="trBondRate" runat="server">
+                        <td class="table_detail_grid_td" valign="top">
+                            <img alt="" src="/images/icons/mandatory.gif" /><b>Bond Rate</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td>
+                                        <asp:TextBox ID="txtBondRate" runat="server" MaxLength="10" onkeypress="return onlyDigitswithDOTWithoutComma(event,'decOK');"
+                                            Style="text-align: right"></asp:TextBox>
+                                        <b>/M</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <asp:RadioButtonList ID="rdbRateCategory" runat="server" RepeatColumns="2" onclick="SetRate();"
+                                            Width="100%">
+                                            <asp:ListItem>Account Rate Net</asp:ListItem>
+                                            <asp:ListItem>Account Rate Gross</asp:ListItem>
+                                            <asp:ListItem>Individual Rate Net</asp:ListItem>
+                                            <asp:ListItem>Individual Rate Gross</asp:ListItem>
+                                        </asp:RadioButtonList>
+                                        <asp:HiddenField ID="hdnAccountCommission" runat="server" />
+                                        <asp:HiddenField ID="hdnIndividualCommission" runat="server" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr id="trBondRateContract" runat="server" visible="false">
+                        <td class="table_detail_grid_td" valign="top">
+                            <img alt="" src="/images/icons/mandatory.gif" /><b>Bond Rate</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:DropDownList ID="ddlContractRatePlan" runat="server" Width="150px" OnSelectedIndexChanged="ddlContractRatePlan_SelectedIndexChanged"
+                                AutoPostBack="True">
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr id="trCommision" runat="server">
+                        <td class="table_detail_grid_td" valign="top">
+                            <img alt="" src="/images/icons/mandatory.gif" /><b>Commission</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1" style="font-weight: bold">
+                            <asp:TextBox ID="txtCommission" runat="server" MaxLength="6" Style="text-align: right"></asp:TextBox>%
+                        </td>
+                    </tr>
+                     <tr>
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Bulk Bill</b></td>
+                        <td class="table_detail_grid_td" valign="top">
+                            <asp:CheckBox ID="chkBulkBill" runat="server" AutoPostBack="true"
+                                ToolTip="By checking this option you need to put Bulk Bill Start & End Date." 
+                                oncheckedchanged="chkBulkBill_CheckedChanged" />
+                        </td>
+                    </tr>
+                    <tr id="trSDate" runat="server">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Bulk Bill Start Date</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <input id="txtBStartDate" runat="server" style="text-align: right" type="text" onclick="this.select();" />
+                            <img id="imgBStartDate" alt="" border="0" src="/images/calendarIcon.gif" style="cursor: hand;vertical-align: text-bottom" 
+                                onmouseover="loadCalendarBillStartDate();" />
+                        </td>
+                    </tr>
+                    <tr id="trEDate" runat="server">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Bulk Bill End Date</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <input id="txtBEndDate" runat="server" style="text-align: right" type="text" onclick="this.select();" />
+                            <img id="imgBEndDate" alt="" border="0" src="/images/calendarIcon.gif" style="cursor: hand;vertical-align: text-bottom" 
+                                onmouseover="loadCalendarBillEndDate();" />
+                        </td>
+                    </tr>
+                    <tr id="trType" runat="server">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Type of Bulk Bill</b>
+                        </td>
+                        <td class="table_detail_grid_td" valign="top">
+                            <asp:DropDownList ID="ddlBulkBillType" runat="server">
+                                <asp:ListItem Value="1">Monthly</asp:ListItem>
+                                <asp:ListItem Value="2">Quaterly</asp:ListItem>
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    
+                    <tr id="trEndorsementEffective" runat="server" style="display: none;">
+                        <td class="table_detail_grid_td" valign="top">
+                            <img alt="" src="/images/icons/mandatory.gif" /><b><asp:Label ID="lblEndorsementDateType"
+                                runat="server" Text="Endorsement Effective Date"></asp:Label></b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <input id="txtEndorsementEffectiveDate" runat="server" style="text-align: right"
+                                type="text" visible="true"  onclick="this.select();"/>
+                            <img id="imgEndorsementEffectiveDate" alt="" border="0" src="/images/calendarIcon.gif"
+                                onmouseover="loadCalendarEndorseEffective();" style="cursor: hand; vertical-align: text-bottom" />
+                            &nbsp;
+                            <asp:CheckBox ID="chkFullyEarned" runat="server" Visible="false" /><b><asp:Label
+                                ID="lblFullyEarned" runat="server" Visible="false">Fully Earned</asp:Label></b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top">
+                            <img alt="" src="/images/icons/mandatory.gif" /><b>Billing Effective Date</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <input id="txtEffectivedt" runat="server" style="text-align: right" type="text"  onclick="this.select();"/>
+                            <img id="imgEffectivedt" alt="" border="0" src="/images/calendarIcon.gif" style="cursor: hand; vertical-align: text-bottom"
+                                onmouseover="loadCalendarEffective();" />
+                            <asp:TextBox ID="txtDaysinForce" runat="server" CssClass="textbox_invisible" ReadOnly="True"
+                                Visible="false" Style="text-align: right" Width="50px"></asp:TextBox>
+                            <asp:Label ID="lblLabel" Text=":" Visible="false" runat="server"></asp:Label>
+                            <asp:TextBox ID="txtDaysRemaining" runat="server" CssClass="textbox_invisible" ReadOnly="True"
+                                Visible="false" Style="text-align: right" Width="50px"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top">
+                            <img alt="" src="/images/icons/mandatory.gif" /><b>Billing Expiration Date</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <input id="txtExpiryDt" runat="server" style="text-align: right" type="text"  onclick="this.select();"/>
+                            <img id="imgExpiryDt" alt="" border="0" src="/images/calendarIcon.gif" style="cursor: hand;vertical-align: text-bottom" 
+                                onmouseover="loadCalendarExpiry();" />
+                                
+                            <asp:TextBox ID="txtTermDays" runat="server" CssClass="textbox_invisible" ReadOnly="True"
+                                Visible="false" Style="text-align: right" Width="50px"></asp:TextBox>
+                            <asp:CheckBox ID="chkProrateOverride" runat="server" Text="Prorate Override" ToolTip="By checking this option you are overridding the calculation of the term days and Calculating based on a full one year term." />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Bid Date</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <input id="txtbiddate" runat="server" style="text-align: right" type="text" onclick="this.select();" />
+                            <img id="imgbiddate" alt="" border="0" src="/images/calendarIcon.gif" style="cursor: hand;vertical-align: text-bottom"
+                               onmouseover="loadCalendarBid();"  />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Bond Term</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:RadioButtonList ID="radioTermlist" runat="server" RepeatDirection="vertical">
+                            </asp:RadioButtonList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Billing Type</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:RadioButtonList ID="radioTypeList" runat="server" RepeatDirection="vertical">
+                            </asp:RadioButtonList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Cancellable</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:CheckBox ID="chkBillCancellation" runat="server" Text=" " OnCheckedChanged="chkBillCancellation_CheckedChanged" />
+                            &nbsp;<b># OF DAYS</b>
+                            <asp:TextBox ID="txtNoOfDays" runat="server" MaxLength="3" onkeypress="return onlyDigits(event,'digit');"
+                                Style="text-align: right" Width="30px"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr id="trCertmail" runat="server">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Certified Mail Receipt#</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:TextBox ID="txtCertMailNo" runat="server" Style="text-align: right"></asp:TextBox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Notes</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <textarea id="bondBillingNotes" runat="server" cols="50" rows="3"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <asp:Label ID="lbltest" runat="server"></asp:Label>
+            </td>
+            <td id="PremiumTable" valign="top" runat="server">
+                <table align="center" border="1" cellpadding="0" cellspacing="0" class="table_title"
+                    width="100%">
+                    <tr>
+                        <td class="">
+                            &nbsp;Premium Details
+                        </td>
+                    </tr>
+                </table>
+                <table align="center" cellpadding="2" class="table_detail_grid" width="100%">
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top" width="40%">
+                            <img alt="" src="/images/icons/mandatory.gif" /><b>Type</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:DropDownList ID="ddlPremiumType" runat="server" onchange="return onLossCostPremium();"
+                                Width="150px">
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table_detail_grid_td" valign="top">
+                            <img alt="" src="/images/icons/mandatory.gif" /><b>Gross Written Premium</b>
+                        </td>
+                        <td class="table_detail_grid_td" align="left">
+                            <input id="txtGWPremium" runat="server" onclick="this.select();" onchange="CalculateCommission();"
+                                readonly="readonly" class="textbox_invisible" maxlength="8" style="width: 145px;
+                                text-align: right" type="text" />
+                            <input id="txtFGWPremium" runat="server" onclick="this.select();" onchange="CalculateCommission();"
+                                readonly="readonly" class="textbox_invisible" maxlength="8" style="width: 145px;
+                                text-align: right" type="text" /><asp:Label ID="lblCurencySymbolPrem" 
+                                runat="server">USD</asp:Label>
+                        </td>
+                    </tr>
+                    <tr id="Tr1" runat="server">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Commission Amount</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1" align="left">
+                            <asp:TextBox ID="txtOriginalCommission" runat="server" CssClass="textbox_invisible"
+                                MaxLength="8" ReadOnly="True" Style="width: 145px; text-align: right" Visible="false"></asp:TextBox>
+                            <input id="txtCommissionPremium" runat="server" maxlength="8" readonly="readonly"
+                                class="textbox_invisible" style="width: 145px; text-align: right" type="text" /><input 
+                                id="txtFCommissionPremium" runat="server" maxlength="8" readonly="readonly"
+                                class="textbox_invisible" style="width: 145px; text-align: right" 
+                                type="text" /><asp:Label ID="lblCurencySymbolComm" runat="server">USD</asp:Label>
+            &nbsp;</td>
+                    </tr>
+                    <tr id="trEndorsementPremium" runat="server" style="display: none;">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>
+                                <asp:Label ID="lblEndorsementPremiumType" runat="server" Text="Endorsement"></asp:Label>
+                                Premium</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <input id="txtEndorsedPremium" runat="server" onclick="this.select();" onchange="CalculateEndorsementPremium();"
+                                readonly="readonly" class="textbox_invisible" style="width: 145px; text-align: right;"
+                                type="text" visible="true" />
+                            <input id="txtSystemEndorsementAmount" runat="server" style="display: none" type="text"
+                                visible="true" />
+                        </td>
+                    </tr>
+                    <tr id="trEndorsementCommissionAmount" runat="server" style="display: none">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>
+                                <asp:Label ID="lblEndorsementCommissionType" runat="server" Text="Endorsement"></asp:Label>
+                                Commission Amount</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <input id="txtEndorsementCommissionAmount" runat="server" class="textbox_invisible"
+                                onchange="CalculateContractCommissionChange();" onkeypress="return onlyDigits(event,'decOK');"
+                                readonly="readonly" style="width: 145px; text-align: right" />
+                        </td>
+                    </tr>
+                    <tr id="trChkManualAdjust" runat="server" style="display: none;">
+                        <td class="table_detail_grid_td" valign="top">
+                            &nbsp;
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:CheckBox ID="chkManualadjust" runat="server" onclick="return adjustpremium();"
+                                Text="Manual Adjust" Width="119px" />
+                        </td>
+                    </tr>
+                    <tr id="rwadjrate" runat="server" style="display: none;">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Adjusted Rate</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:TextBox ID="txtAdJustedRate1" runat="server" MaxLength="4" onblur="return CalculateAdjustedPremium();"
+                                onkeypress="return onlyDigits(event,'decOK');" Style="width: 145px; text-align: right"
+                                Visible="false"></asp:TextBox>
+                            <input id="txtAdJustedRate" runat="server" maxlength="4" onblur="return CalculateAdjustedPremium();"
+                                style="width: 145px; text-align: right" type="text" />
+                        </td>
+                    </tr>
+                    <tr id="rwadjPremium" runat="server" style="display: none;">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Adjusted Premium</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:TextBox ID="txtAdjustedPremium1" runat="server" MaxLength="8" onkeypress="return onlyDigits(event,'dec');"
+                                Style="width: 145px; text-align: right" Visible="False"></asp:TextBox>
+                            <input id="txtAdjustedPremium" runat="server" maxlength="8" readonly="readonly" style="width: 145px;
+                                text-align: right" type="text" />
+                        </td>
+                    </tr>
+                    <tr id="rwadjCommission" runat="server" style="display: none;">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Adjusted Commission</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <asp:TextBox ID="txtadjustedCommission1" runat="server" MaxLength="8" ReadOnly="true"
+                                Style="width: 145px; text-align: right" Visible="False"></asp:TextBox>
+                            <input id="txtadjustedCommission" runat="server" maxlength="8" style="width: 145px;
+                                text-align: right" type="text" />
+                        </td>
+                    </tr>
+                    <tr id="rwnote" runat="server" style="display: none;">
+                        <td class="table_detail_grid_td" valign="top">
+                            <b>Note</b>
+                        </td>
+                        <td class="table_detail_grid_td" colspan="1">
+                            <textarea id="Bondsnote" runat="server" cols="28" rows="2"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <table align="center" border="1" cellpadding="0" cellspacing="0" class="table_title"
+                    width="100%" id="tblContractHeader" runat="server">
+                    <tr>
+                        <td class="">
+                            &nbsp;Contract Premium Details
+                        </td>
+                    </tr>
+                </table>
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="table_detail_grid"
+                    id="tblContractDetails" runat="server">
+                    <tr>
+                        <td class="table_detail_grid_td" colspan="2">
+                            <cc2:DataGridClick ID="dgContractRates" runat="server" OnItemDataBound="dgContractRates_ItemDataBound"
+                                PageSize="50" RowClickEventCommandName="Select" RowHighlightColor="#C0FFC0" Width="100%"
+                                CssClass="table_detail_grid" AutoGenerateColumns="False">
+                                <EditItemStyle Font-Size="XX-Small" HorizontalAlign="Left" VerticalAlign="Top" Wrap="False" />
+                                <SelectedItemStyle HorizontalAlign="Left" VerticalAlign="Top" Wrap="False" />
+                                <PagerStyle Font-Size="XX-Small" Wrap="False" Position="TopAndBottom" />
+                                <AlternatingItemStyle HorizontalAlign="Left" VerticalAlign="Top" Wrap="False" CssClass="table_detail_grid_td" />
+                                <ItemStyle HorizontalAlign="Left" VerticalAlign="Top" Wrap="False" />
+                                <HeaderStyle Font-Bold="True" HorizontalAlign="Left" VerticalAlign="Top" Wrap="False" />
+                                <Columns>
+                                    <asp:TemplateColumn HeaderText="brid" Visible="False">
+                                        <EditItemTemplate>
+                                            <asp:TextBox runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.bondrateid") %>'></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblbrid" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.bondrateid") %>'
+                                                ></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="bondid" Visible="False">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblbid" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.bondid") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="From">
+                                        <EditItemTemplate>
+                                            <asp:TextBox runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.lowerlimit", "{0:C}") %>'></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblLowerLimit" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.lowerlimit", "{0:C}") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="To">
+                                        <EditItemTemplate>
+                                            <asp:TextBox runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.upperlimit", "{0:C}") %>'></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblUpperLimit" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.upperlimit", "{0:C}") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Rate">
+                                        <EditItemTemplate>
+                                            <asp:TextBox runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.Rate", "{0:C}") %>'></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblRate" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.Rate", "{0:C}") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Surcharge">
+                                        <EditItemTemplate>
+                                            &nbsp;<asp:TextBox ID="txtSurcharge" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.surcharge") %>'
+                                                ></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblSurcharge" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.surcharge") %>'
+                                                ></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Comm %">
+                                        <EditItemTemplate>
+                                            <asp:TextBox runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.commissionpercent", "{0:N2}") %>'></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblCommissionPercent" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.commissionpercent", "{0:N2}") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Comm $">
+                                        <EditItemTemplate>
+                                            <asp:TextBox runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.commission", "{0:C}") %>'></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblCommission" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.commission", "{0:C}") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                    <asp:TemplateColumn HeaderText="Premium">
+                                        <EditItemTemplate>
+                                            <asp:TextBox runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.premium", "{0:C}") %>'></asp:TextBox>
+                                        </EditItemTemplate>
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblPremium" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.premium", "{0:C}") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateColumn>
+                                </Columns>
+                            </cc2:DataGridClick>
+                            &nbsp;
+                            <asp:Label ID="lblTotalSurcharge" runat="server"></asp:Label>
+                            <asp:Label ID="lbltotalComm" runat="server" Visible="False"></asp:Label>
+                            <asp:Label ID="lblTotalPremium" runat="server"></asp:Label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Completion Surcharge</strong>
+                        </td>
+                        <td>
+                            <asp:TextBox ID="txtCompSurcharge" runat="server" MaxLength="6" Style="text-align: right">0</asp:TextBox><strong>%</strong>
+                        </td>
+                    </tr>
+                    <tr id="trMaintenanceCharge" runat="server" visible="false">
+                        <td>
+                            <strong>Maintenance Charge</strong>
+                        </td>
+                        <td>
+                            <asp:TextBox ID="txtMaintenanceCharge" runat="server" MaxLength="6" Style="text-align: right">0</asp:TextBox>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <table width="100%" id="tblFronting" runat="server">
+                    <tr id="trFronting" runat="server">
+                        <td colspan="3">
+                            <table id="Table1" runat="server" align="center" border="1" cellpadding="0" cellspacing="0"
+                                class="table_title" width="100%">
+                                <tr>
+                                    <td class="">
+                                        &nbsp;Fronting Details&nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="Table2" runat="server" align="center" cellpadding="2" class="table_detail_grid"
+                                width="100%">
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top" width="40%">
+                                        <b>
+                                            <asp:Label ID="Label10" runat="server" 
+                                            Text="USD  Bond Amount"></asp:Label></b>
+                                    </td>
+                                    <td class="table_detail_grid_td" colspan="1">
+                                        <b>
+                                            <asp:Label ID="lblFAmount" runat="server"></asp:Label></b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top" width="40%">
+                                        <b>
+                                            <asp:Label ID="Label13" runat="server" 
+                                            Text="USD  Bond Premium / Comm"></asp:Label></b>
+                                    </td>
+                                    <td class="table_detail_grid_td" colspan="1">
+                                        <b>
+                                            <asp:Label 
+                                            ID="lblFPremium" runat="server"></asp:Label>&nbsp;/
+                                        <asp:Label 
+                                            ID="lblFCommission" runat="server"></asp:Label></b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top" width="40%">
+                                        <b>
+                                            <asp:Label ID="Label14" runat="server" 
+                                            Text="USD  Bond Total Tax/Fees"></asp:Label></b>
+                                    </td>
+                                    <td class="table_detail_grid_td" colspan="1">
+                                        <b>
+                                            <asp:Label 
+                                            ID="lblFTotalTaxFee" runat="server"></asp:Label></b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top" width="40%">
+                                        <b>
+                                            <asp:Label ID="Label11" runat="server" Text="Foreign  Bondnumber"></asp:Label></b>
+                                    </td>
+                                    <td class="table_detail_grid_td" colspan="1">
+                                        <asp:TextBox ID="txtFBondnumber" runat="server"
+                                            Style="text-align: right"></asp:TextBox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top" width="40%">
+                                        <b>
+                                            <asp:Label ID="Label6" runat="server" Text="Foreign Broker"></asp:Label></b>
+                                    </td>
+                                    <td class="table_detail_grid_td" colspan="1">
+                                    
+                                    <asp:UpdatePanel ID="BusinessErrorUpdatepanel" runat="server">
+                                        <ContentTemplate>
+                                        <asp:DropDownList ID="ddlFBroker" runat="server">
+                                        </asp:DropDownList>
+                                    </ContentTemplate>
+                                    </asp:UpdatePanel>
+                                    &nbsp;<asp:LinkButton ID="LinkButton1" runat="server" onclick="LinkButton1_Click">Add Broker</asp:LinkButton>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top">
+                                        <b>
+                                            <asp:Label ID="Label7" runat="server" Text="Foreign Broker Commission"></asp:Label></b>
+                                    </td>
+                                    <td class="table_detail_grid_td" colspan="1">
+                                        <asp:TextBox ID="txtFBrokerCommission" runat="server" onblur="FrontingSplit();" 
+                                            Style="text-align: right"></asp:TextBox>
+                                        <b>
+                                            <asp:Label ID="Label1" runat="server">Split: </asp:Label>
+                                        <asp:TextBox 
+                                            ID="txtFCommSplit" runat="server" CssClass="textbox_invisible"></asp:TextBox>
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top">
+                                        <b>
+                                            <asp:Label ID="Label12" runat="server" 
+                                            Text="Foreign Broker Contact Details"></asp:Label></b>
+                                    </td>
+                                    <td class="table_detail_grid_td" colspan="1">
+                                        <cc2:DataGridClick ID="dgBrokerContacts" runat="server" AllowSorting="True"
+                                            BorderColor="#EEEEEE" BorderStyle="Solid" BorderWidth="1px" 
+                                            CellPadding="3"
+                                            ShowHeader="False" PageSize="50" RowClickEventCommandName="Select" RowHighlightColor="#C0FFC0"
+                                            Width="100%" CssClass="table_detail_grid" AutoGenerateColumns="False">
+                                            <FooterStyle BackColor="#EEEEEE" Font-Bold="False" Font-Italic="False" Font-Overline="False"
+                                                Font-Strikeout="False" Font-Underline="False" />
+                                            <EditItemStyle Font-Size="XX-Small" HorizontalAlign="Left" VerticalAlign="Top" Wrap="False" />
+                                            <SelectedItemStyle ForeColor="White" BackColor="#999999" Font-Bold="True" HorizontalAlign="Left"
+                                                VerticalAlign="Top" Wrap="False" />
+                                            <PagerStyle ForeColor="Black" BackColor="#999999" Font-Bold="True" Font-Size="XX-Small"
+                                                HorizontalAlign="Left" Wrap="False" Mode="NumericPages" Position="TopAndBottom" />
+                                            <AlternatingItemStyle BackColor="#EEEEEE" HorizontalAlign="Left" VerticalAlign="Top"
+                                                Wrap="False" CssClass="table_detail_grid_td" />
+                                            <ItemStyle HorizontalAlign="Left" VerticalAlign="Top" Wrap="False" />
+                                            <HeaderStyle BorderColor="#6B696B" BackColor="#EEEEEE" Font-Bold="True" Font-Italic="False"
+                                                Font-Overline="False" Font-Strikeout="False" Font-Underline="False" HorizontalAlign="Left"
+                                                VerticalAlign="Top" Wrap="False" />
+                                            <Columns>
+                                                <asp:TemplateColumn HeaderText="contactid" Visible="False">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblid0" runat="server" 
+                                                            Text='<%# DataBinder.Eval(Container, "DataItem.contactid") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:BoundColumn DataField="Description" HeaderText="Description">
+                                                </asp:BoundColumn>
+                                                <asp:BoundColumn DataField="ContactDetail" HeaderText="ContactDetail">
+                                                </asp:BoundColumn>
+                                            </Columns>
+                                        </cc2:DataGridClick>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top">
+                                        <b>
+                                            <asp:Label ID="Label9" runat="server" Text="Fronting Note"></asp:Label></b>
+                                    </td>
+                                    <td class="table_detail_grid_td" colspan="1">
+                                        <textarea id="txtFNotes" runat="server" cols="50" rows="3" name="S1"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top">
+                                    </td>
+                                    <td class="table_detail_grid_td">
+                                        &nbsp;
+                                    <asp:Label ID="lblLastDate" runat="server"></asp:Label>
+                            <asp:Label ID="lblCurrencyRate" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <table width="100%">
+                    <tr>
+                        <td colspan="3">
+                            <table align="center" border="1" cellpadding="0" cellspacing="0" class="table_title"
+                                width="100%">
+                                <tr>
+                                    <td class="">
+                                        &nbsp;Bond Fees
+                                    </td>
+                                </tr>
+                            </table>
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="table_detail_grid">
+                                <tr>
+                                    <td class="table_detail_grid_td">
+                                        <cc2:DataGridClick ID="dgTaxFee" runat="server" AllowSorting="True" AutoGenerateColumns="False"
+                                            BorderColor="#EEEEEE" BorderStyle="Solid" BorderWidth="1px" CellPadding="3"
+                                            OnItemCommand="dgTaxFee_ItemCommand" OnItemDataBound="dgTaxFee_ItemDataBound"
+                                            ShowHeader="False" PageSize="50" RowClickEventCommandName="Select" RowHighlightColor="#C0FFC0"
+                                            Width="100%" CssClass="table_detail_grid">
+                                            <FooterStyle BackColor="#EEEEEE" Font-Bold="False" Font-Italic="False" Font-Overline="False"
+                                                Font-Strikeout="False" Font-Underline="False" />
+                                            <EditItemStyle Font-Size="XX-Small" HorizontalAlign="Left" VerticalAlign="Top" Wrap="False" />
+                                            <SelectedItemStyle ForeColor="White" BackColor="#999999" Font-Bold="True" HorizontalAlign="Left"
+                                                VerticalAlign="Top" Wrap="False" />
+                                            <PagerStyle ForeColor="Black" BackColor="#999999" Font-Bold="True" Font-Size="XX-Small"
+                                                HorizontalAlign="Left" Wrap="False" Mode="NumericPages" Position="TopAndBottom" />
+                                            <AlternatingItemStyle BackColor="#EEEEEE" HorizontalAlign="Left" VerticalAlign="Top"
+                                                Wrap="False" CssClass="table_detail_grid_td" />
+                                            <ItemStyle HorizontalAlign="Left" VerticalAlign="Top" Wrap="False" />
+                                            <HeaderStyle BorderColor="#6B696B" BackColor="#EEEEEE" Font-Bold="True" Font-Italic="False"
+                                                Font-Overline="False" Font-Strikeout="False" Font-Underline="False" HorizontalAlign="Left"
+                                                VerticalAlign="Top" Wrap="False" />
+                                            <Columns>
+                                                <asp:TemplateColumn HeaderText="bondid" Visible="False">
+                                                    <ItemTemplate>
+                                                        <asp:Label ID="lblid" runat="server" Text='<%# DataBinder.Eval(Container, "DataItem.bondid") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:TemplateColumn HeaderText="bondtaxid" Visible="False">
+                                                    <ItemTemplate>
+                                                        <asp:Label runat="server" ID="lblbtid" Text='<%# DataBinder.Eval(Container, "DataItem.BondDetailTaxFeeID") %>'></asp:Label>
+                                                    </ItemTemplate>
+                                                </asp:TemplateColumn>
+                                                <asp:BoundColumn ItemStyle-Width="40%" ItemStyle-CssClass="table_detail_grid_td"
+                                                    DataField="taxdescription" SortExpression="taxdescription">
+<ItemStyle CssClass="table_detail_grid_td" Width="40%"></ItemStyle>
+                                                </asp:BoundColumn>
+                                                <asp:BoundColumn DataField="TaxType" ItemStyle-CssClass="table_detail_grid_td" 
+                                                    SortExpression="TaxType" HeaderText="Fee Type">
+<ItemStyle CssClass="table_detail_grid_td"></ItemStyle>
+                                                </asp:BoundColumn>
+                                                <asp:TemplateColumn SortExpression="amount" ItemStyle-CssClass="table_detail_grid_td">
+                                                    <ItemTemplate>
+                                                        <table width="75%">
+                                                            <tr>
+                                                                <td>
+                                                                    <asp:Label runat="server" ID="lblamt" Visible="false" Text='<%# DataBinder.Eval(Container, "DataItem.amount") %>'></asp:Label>                                                                    
+                                                                </td>
+                                                                <td align="right" width='150px'>
+                                                                    <asp:Label  runat="server" ID="lblamt2" Text='<%# DataBinder.Eval(Container, "DataItem.amount","{0:C} ") %>'></asp:Label>
+                                                                    <asp:Label  runat="server" ID="lblamtCurrency" Text='USD'></asp:Label>
+                                                                </td>
+                                                                <td align="right"width='150px'>
+                                                                    <asp:Label  runat="server" ID="lblFamt" Text='<%# DataBinder.Eval(Container, "DataItem.foreignamount","{0:C} ") %>'></asp:Label>
+                                                                    <asp:Label  runat="server" ID="lblFamtCurrency" Text='XXX'></asp:Label>
+                                                                </td>
+                                                            </tr>                                                           
+                                                        </table>
+                                                    </ItemTemplate>
+                                                    <HeaderStyle Font-Bold="False" Font-Italic="False" Font-Overline="False" Font-Strikeout="False"
+                                                        Font-Underline="False" HorizontalAlign="Center" />
+                                                    <ItemStyle Font-Bold="False" Font-Italic="False" Font-Overline="False" Font-Strikeout="False"
+                                                        Font-Underline="False" HorizontalAlign="Right" />
+                                                </asp:TemplateColumn>                                               
+                                            </Columns>
+                                        </cc2:DataGridClick>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" class="table_detail_grid_td">
+                                     <table width='100%'>
+                                                            <tr>     
+                                                            <td align="right">&nbsp;</td>
+                                                            <td align="right">
+                            <asp:Label ID="lblmsgtaxnfees" runat="server" ForeColor="Red"></asp:Label>
+                                                                </td>                                                           
+                                                                <td align="right" width='170px'>
+                                                                    <asp:TextBox ID="txtTotalTaxnFees" runat="server" Visible="False"></asp:TextBox>
+                                        <asp:Label ID="Label3" runat="server" Font-Bold="True">Total  :&nbsp;</asp:Label>
+                                        <asp:Label ID="lblTotal" runat="server" CssClass="CurrencyTotalGreen"></asp:Label>
+                                        <asp:Label ID="lblCurencySymbolTaxFees" runat="server">USD&nbsp;&nbsp;</asp:Label>
+                                        </td>
+                                                                <td align="right" width='100px'>
+                                                                    <asp:Label ID="lblFTotal" runat="server" CssClass="CurrencyTotalGreen"></asp:Label>
+                                        <asp:Label ID="lblFCurencySymbolTaxFees" runat="server">XXX&nbsp;</asp:Label></td>
+                                                            </tr>                                                           
+                                                        </table>
+                                 </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" class="table_detail_grid_td">
+                                        <table width="100% " runat="server" id="tblEndorseTaxesnFees">
+                                            <tr>
+                                                <td class="table_detail_grid_td" valign="top" width="40%" align="left">
+                                        <b>
+                                            <asp:Label ID="Label15" runat="server" Text="Endorsed Taxes/Fees"></asp:Label></b>
+                                                </td>
+                                                <td class="table_detail_grid_td" align="left">
+                                        <asp:TextBox ID="txtEndorsementTaxesNFees" runat="server" onclick="this.select();" 
+                                                        Style="text-align: right"></asp:TextBox>
+                                                </td>
+                                                
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br />
+                        </td>
+                    </tr>
+                    <tr id="trFees" runat="server">
+                        <td colspan="3">
+                            <table id="tblFeesTitle" runat="server" align="center" border="1" cellpadding="0"
+                                cellspacing="0" class="table_title" width="100%">
+                                <tr>
+                                    <td class="">
+                                        &nbsp;Add/Remove Fees&nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="tblFees" runat="server" align="center" cellpadding="2" class="table_detail_grid"
+                                width="100%">
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top" width="40%">
+                                        <b>
+                                            <asp:Label ID="Label2" runat="server" Text="Fee"></asp:Label></b>
+                                    </td>
+                                    <td class="table_detail_grid_td" colspan="1">
+                                        <asp:DropDownList ID="ddlFee" runat="server">
+                                        </asp:DropDownList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top">
+                                        <b>
+                                            <asp:Label ID="Label3" runat="server" Text="Amount"></asp:Label></b>
+                                    </td>
+                                    <td class="table_detail_grid_td" colspan="1">
+                                        <asp:TextBox ID="txtAmount" runat="server" onclick="this.select();" Style="text-align: right"></asp:TextBox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table_detail_grid_td" valign="top">
+                                    </td>
+                                    <td class="table_detail_grid_td">
+                                        &nbsp;<asp:Button ID="Button1" runat="server" CssClass="flatbutton" OnClick="btnSave_Click"
+                                            OnClientClick="return ValidationFee();" Text=" Save " />&nbsp;
+                                        <asp:Button ID="btnRemove" runat="server" CssClass="flatbutton" OnClick="btnRemove_Click"
+                                            Text="Remove" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <asp:HiddenField ID="hdnBondNumber" runat="server" />
+    <asp:HiddenField ID="hdnBondNumberFull" runat="server" />
+    <asp:HiddenField ID="hdnRenewEndorse" runat="server" />
+    <asp:HiddenField ID="hdnEndorsementID" runat="server" />
+    <asp:HiddenField ID="hdnPriorEarnedPremium" runat="server" Value="0" />
+    <asp:HiddenField ID="hdnPriorUnEarnedPremium" runat="server" Value="0" />
+    <asp:HiddenField ID="hdnBondType" runat="server" />
+    <asp:HiddenField ID="hdnPremiumAmount" runat="server" />
+    <asp:HiddenField ID="hdnClasscodeID" runat="server" />
+    <asp:HiddenField ID="hdnClassCode" runat="server" />
+    <asp:HiddenField ID="hdnBondcategory" runat="server" />
+    <asp:HiddenField ID="hdnBondDescription" runat="server" />
+    <asp:HiddenField ID="hdnExposureType" runat="server" />
+    <asp:HiddenField ID="hdnRiskfactor" runat="server" />
+    <asp:HiddenField ID="hdnBusinessType" runat="server" />
+    <asp:HiddenField ID="hdnFeesRequired" runat="server" Value="0" />
+
+</asp:Content>
+

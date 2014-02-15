@@ -1,0 +1,507 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="RiskAssessment2.aspx.cs" Inherits="RiskAssessment2" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <style type="text/css">
+    .style2
+    {
+        width: 13%;
+        height: 0px;
+    }
+    .style3
+    {
+        width: 115px;
+    }
+    .style4
+    {
+        width: 98%;
+    }
+    .style5
+    {
+        width: 133px;
+    }
+    .style6
+    {
+        width: 597px;
+    }
+    .style7
+    {
+        width: 91px;
+    }
+    .style8
+    {
+        width: 126px;
+    }
+    .style9
+    {
+        height: 43px;
+    }
+    .style10
+    {
+        height: 43px;
+        width: 156px;
+    }
+    .style11
+    {
+        width: 156px;
+    }
+</style>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <table class="style2">
+    <tr>
+        <td class="style3">
+                <asp:Label ID="Label11" runat="server" Text="Applicable Entities" CssClass="style1"></asp:Label>
+                <asp:SqlDataSource ID="entitiesDS" runat="server" 
+                    ConnectionString="Data Source=SAT-C7Q8XL1;Initial Catalog=RiskRegister;Integrated Security=True" 
+                    
+        ProviderName="System.Data.SqlClient" SelectCommand="[dbo].[EntitySelectAll]" 
+                    SelectCommandType="StoredProcedure">
+                    <SelectParameters>
+                        <asp:Parameter Direction="ReturnValue" Name="RETURN_VALUE" Type="Int32" />
+                    </SelectParameters>
+                </asp:SqlDataSource>
+        </td>
+    </tr>
+    <tr>
+        <td class="style3">
+                <asp:CheckBoxList ID="entityCheckBoxList" runat="server" 
+                    DataSourceID="entitiesDS" DataTextField="Entity_Name" 
+                    DataValueField="Entity_ID" Width="81px">
+                </asp:CheckBoxList>
+                                    </td>
+    </tr>
+</table>
+<table class="style2">
+    <tr>
+        <td>
+            <table style="height: 278px; width: 558px">
+                <tr>
+                    <td>
+                        &nbsp;</td>
+                    <td>
+                        <asp:Label ID="Label17" runat="server" Text="Risk Details"></asp:Label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                <asp:Label ID="Label12" runat="server" Text="Risk Type"></asp:Label>
+                                            </td>
+                    <td>
+                <asp:DropDownList ID="ddlRiskType" runat="server" Height="20px" Width="450px" 
+                                        DataSourceID="riskTypeDS" DataTextField="Risk_Type_Description" 
+                                        DataValueField="Risk_Type_ID" AutoPostBack="True" 
+                                        onselectedindexchanged="ddlRiskType_SelectedIndexChanged">
+                </asp:DropDownList>
+                                        </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;</td>
+                    <td>
+                                    <asp:Label ID="risktypeSelection" runat="server"></asp:Label>
+                                            <asp:RequiredFieldValidator ID="riskTypeValidator" runat="server" 
+                                        ControlToValidate="ddlRiskType" ErrorMessage="Risk Type Required" 
+                                        ForeColor="Red">Risk Type Required</asp:RequiredFieldValidator>
+    <asp:SqlDataSource ID="riskTypeDS" runat="server" 
+        ConnectionString="Data Source=SAT-C7Q8XL1;Initial Catalog=RiskRegister;Integrated Security=True"  
+        ProviderName="System.Data.SqlClient" SelectCommand="[dbo].[Risk_TypeSelectAll]" 
+        SelectCommandType="StoredProcedure"></asp:SqlDataSource>
+
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                <asp:Label ID="lblInherentRisk" runat="server" Text="Inherent Risk"></asp:Label>
+                                            </td>
+                    <td>
+    <asp:DropDownList ID="ddlInherentRisk" runat="server" Height="20px" 
+        Width="450px" DataSourceID="inherentRiskDS" DataTextField="Inherent_Risk_Desc" 
+                                        DataValueField="Inherent_Risk_ID" AutoPostBack="True" 
+                                        onselectedindexchanged="ddlInherentRisk_SelectedIndexChanged">
+    </asp:DropDownList>
+                                            </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;</td>
+                    <td>
+                                                <asp:Label ID="inherentRiskSelection" runat="server"></asp:Label>
+                                            <asp:RequiredFieldValidator ID="inherentRiskValidator" 
+                                        runat="server" ControlToValidate="ddlInherentRisk" 
+                                        ErrorMessage="Inherent Risk Type Required" ForeColor="Red"></asp:RequiredFieldValidator>
+
+
+    <asp:SqlDataSource ID="inherentRiskDS" runat="server" 
+        ProviderName="System.Data.SqlClient" 
+        SelectCommand="[dbo].[Inherent_RiskSelectAll]" 
+        SelectCommandType="StoredProcedure" 
+        
+                    
+                    ConnectionString="Data Source=SAT-C7Q8XL1;Initial Catalog=RiskRegister;Integrated Security=True"></asp:SqlDataSource>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                <asp:Label ID="lblInherentRisk0" runat="server" Text="Risk Tolerance"></asp:Label>
+                                        </td>
+                    <td>
+                                    <asp:DropDownList ID="ddlRiskTolerance" runat="server" Height="20px" 
+                                        Width="450px" DataSourceID="riskToleranceDS" 
+                                        DataTextField="Risk_Tolerance_Desc" DataValueField="Risk_Tolerance_ID" 
+                                        AutoPostBack="True" 
+                                        onselectedindexchanged="ddlRiskTolerance_SelectedIndexChanged">
+                                    </asp:DropDownList>
+                                        </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;</td>
+                    <td>
+                                    <asp:Label ID="riskToleranceSelcetion" runat="server"></asp:Label>
+                                            <asp:RequiredFieldValidator ID="toleranceValidator" runat="server" 
+                                        ControlToValidate="ddlRiskTolerance" ErrorMessage="Risk Tolerance Required" 
+                                        ForeColor="Red"></asp:RequiredFieldValidator>
+    <asp:SqlDataSource ID="riskToleranceDS" runat="server" 
+        ConnectionString="Data Source=SAT-C7Q8XL1;Initial Catalog=RiskRegister;Integrated Security=True" 
+        ProviderName="System.Data.SqlClient" 
+        SelectCommand="[dbo].[Risk_ToleranceSelectAll]" 
+    SelectCommandType="StoredProcedure"></asp:SqlDataSource>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table class="style2">
+                <tr>
+                    <td>
+                <asp:Label ID="Label16" runat="server" Text="Owner Selection"></asp:Label>
+                                        </td>
+                    <td>
+                <asp:Label ID="Label15" runat="server" Text="Identified Risk Owners"></asp:Label>
+                                        </td>
+                </tr>
+                <tr>
+                    <td>
+                <asp:ListBox ID="ownersListBox" runat="server" Height="194px" Width="298px" AutoPostBack="True" 
+                                            onselectedindexchanged="ownersListBox_SelectedIndexChanged">
+                </asp:ListBox>
+                                        </td>
+                    <td>
+                <asp:ListBox ID="riskOwnerListBox" runat="server" Height="194px" Width="292px" SelectionMode="Multiple">
+                </asp:ListBox>
+                                        </td>
+                </tr>
+                <tr>
+                    <td>
+                            <asp:Button ID="addButton" runat="server" Text="Add" Width="77px" 
+                                            onclick="addButton_Click" />
+    <asp:SqlDataSource ID="employeeDS" runat="server" 
+                            ConnectionString="Data Source=SAT-C7Q8XL1;Initial Catalog=RiskRegister;Integrated Security=True" 
+                            SelectCommand="[dbo].[OwnerSelect]" 
+                            
+                            ProviderName="System.Data.SqlClient" ondatabinding="ownersListBox_SelectedIndexChanged" 
+                                            SelectCommandType="StoredProcedure">
+        <SelectParameters>
+            <asp:Parameter Direction="ReturnValue" Name="RETURN_VALUE" Type="Int32" />
+            <asp:ControlParameter ControlID="ownersListBox" Name="Owner_ID" 
+                PropertyName="SelectedValue" Type="Int32" />
+        </SelectParameters>
+                        </asp:SqlDataSource>
+                                        </td>
+                    <td>
+                            <asp:Button ID="removeButton" runat="server" Text="Remove" Width="84px" 
+                                            onclick="removeButton_Click" />
+    <asp:SqlDataSource ID="ownerDS" runat="server" 
+                                        
+                                        ProviderName="System.Data.SqlClient" 
+                                            
+                                            
+                                            
+                                            ConnectionString="Data Source=SAT-C7Q8XL1;Initial Catalog=RiskRegister;Integrated Security=True"></asp:SqlDataSource>
+                                        </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table class="style4">
+                <tr>
+                    <td>
+                <asp:Label ID="Label1" runat="server" Text="Risk Scenario"></asp:Label>
+                                        </td>
+                </tr>
+                <tr>
+                    <td>
+                <asp:TextBox ID="textRiskScenario" runat="server" Height="107px" Width="553px" 
+                    TextMode="MultiLine"></asp:TextBox>
+                                        </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+                                            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" 
+                                                DataKeyNames="Owner_ID" DataSourceID="employeeDS" Height="16px" 
+                                                ondatabinding="ownersListBox_SelectedIndexChanged">
+                                                <Columns>
+                                                    <asp:BoundField DataField="Owner_ID" HeaderText="Owner_ID" 
+                                                        InsertVisible="False" ReadOnly="True" SortExpression="Owner_ID" />
+                                                    <asp:BoundField DataField="First_Name" HeaderText="First_Name" 
+                                                        SortExpression="First_Name" />
+                                                    <asp:BoundField DataField="Last_Name" HeaderText="Last_Name" 
+                                                        SortExpression="Last_Name" />
+                                                    <asp:BoundField DataField="Email_Address" HeaderText="Email_Address" 
+                                                        SortExpression="Email_Address" />
+                                                </Columns>
+                                            </asp:GridView>
+                                        </td>
+    </tr>
+</table>
+<table class="style4">
+    <tr>
+        <td class="style5">
+                                            <asp:Label ID="Label43" runat="server" Text="Risk Probability"></asp:Label>
+                                        </td>
+        <td>
+                                            <asp:Label ID="Label44" runat="server" Text="Score Description"></asp:Label>
+                                        </td>
+    </tr>
+    <tr>
+        <td class="style5">
+    <asp:RadioButtonList ID="radioRiskProbability" runat="server" Width="128px" 
+                Height="130px">
+        <asp:ListItem Value="1">1 - Improbable</asp:ListItem>
+        <asp:ListItem Value="2">2 - Doubtful</asp:ListItem>
+        <asp:ListItem Value="3">3 - Moderate</asp:ListItem>
+        <asp:ListItem Value="4">4 - Possible</asp:ListItem>
+        <asp:ListItem>5 - Very Likely</asp:ListItem>
+    </asp:RadioButtonList>
+                        </td>
+        <td>
+            <asp:BulletedList ID="BulletedList1" runat="server">
+                <asp:ListItem>1 = Improbable: The probability of exposure to this risk is remote. Given the very predictable and stable environment of this risk and negligible exposure to external factors. This risk may occur in rare or exceptional circumstances.  </asp:ListItem>
+                <asp:ListItem>2 = Doubtful: The probability of exposure of this risk is unlikely Given the predictable and stable environment of this risk and limited exposure to external factors. There is a slight possibility that the risk could occur at some time.    </asp:ListItem>
+                <asp:ListItem>3 = Moderate: Given the less predictable and less stable environment of this risk and notable exposure to external factors, there is a possibility that this risk may occur at some time.    </asp:ListItem>
+                <asp:ListItem>4 = Possible: The possibility of this risk is likely, given the unpredictable and unstable environment of this risk and prevalent exposure to external factors within the next 12 months.    </asp:ListItem>
+                <asp:ListItem>5 = Very likely: The probability of this risk is almost certain. Given the highly unpredictable and unstable environment of this risk and significant exposure factors, this risk, left uncontrolled is likely to occur in most circumstances. </asp:ListItem>
+            </asp:BulletedList>
+        </td>
+    </tr>
+    <tr>
+        <td class="style5">
+                                    <asp:Label ID="Label45" runat="server" 
+                Text="Risk Impact"></asp:Label>
+                                        </td>
+        <td>
+                                    <asp:Label ID="Label18" runat="server" Text="Risk Impact Descriptions"></asp:Label>
+                                        </td>
+    </tr>
+    <tr>
+        <td class="style5">
+                                    <asp:RadioButtonList ID="radioRiskImpact" runat="server" Height="151px" 
+                                        Width="141px" onselectedindexchanged="radioRiskImpact_SelectedIndexChanged">
+                                        <asp:ListItem Value="1">1 - High Impact</asp:ListItem>
+                                        <asp:ListItem Value="2">2 - Moderate Impact</asp:ListItem>
+                                        <asp:ListItem Value="3">3 - Low Impact</asp:ListItem>
+                                    </asp:RadioButtonList>
+                                        </td>
+        <td>
+            <asp:BulletedList ID="BulletedList2" runat="server">
+                <asp:ListItem>1 = Low: The risk/event will not cause a material impact to the Company&#39;s operations and/or financials and no negative effects are expected. Any negative impact can be corrected without significant effort or visibility.  </asp:ListItem>
+                <asp:ListItem>2 = Medium: The risk/event will have some impact on the Company&#39;s operations and/or financials and may cause possible disruption for non-critical areas of the Company.    </asp:ListItem>
+                <asp:ListItem>3 = High: The risk/event will have major impact on the Company&#39;s operations and/or financials and is likely to cause significant disruption in service, a very visible event.  </asp:ListItem>
+            </asp:BulletedList>
+        </td>
+    </tr>
+    <tr>
+        <td class="style5">
+                                    <asp:Label ID="Label22" runat="server" Text="Risk Score"></asp:Label>
+                                        </td>
+        <td>
+                                    <asp:Label ID="riskScoreLabel" runat="server"></asp:Label>
+                                        </td>
+    </tr>
+</table>
+<table class="style4">
+    <tr>
+        <td class="style6">
+                <asp:Label ID="Label23" runat="server" Text="Mitigating Controls"></asp:Label>
+                            <asp:SqlDataSource ID="controlsDS" runat="server" 
+                                ConnectionString="Data Source=SAT-C7Q8XL1;Initial Catalog=RiskRegister;Integrated Security=True" 
+                                ProviderName="System.Data.SqlClient" 
+                                SelectCommand="[dbo].[ControlsSelectAll]" SelectCommandType="StoredProcedure">
+                            </asp:SqlDataSource>
+                                            </td>
+        <td>
+                <asp:Label ID="Label24" runat="server" Text="Applicable Controls"></asp:Label>
+                                            </td>
+    </tr>
+    <tr>
+        <td class="style6">
+                <asp:ListBox ID="controlsListBox" runat="server" Height="201px" 
+                    style="margin-left: 0px" Width="558px" DataSourceID="controlsDS" DataTextField="Control_Description" 
+                                                    DataValueField="Control_ID"></asp:ListBox>
+                                            </td>
+        <td>
+                <asp:ListBox ID="ctrlMeasuresListBox" runat="server" Height="198px" 
+                    style="margin-top: 0px" Width="504px"></asp:ListBox>
+                                            </td>
+    </tr>
+    <tr>
+        <td class="style6">
+                                                <asp:Button ID="controlAddButton" runat="server" Text="Add" Width="72px" 
+                                                    onclick="controlAddButton_Click" />
+                                                </td>
+        <td>
+                                                <asp:Button ID="controlRemoveButton" runat="server" Text="Remove" 
+                                                    Width="74px" onclick="controlRemoveButton_Click" />
+                                            </td>
+    </tr>
+</table>
+<table class="style4">
+    <tr>
+        <td class="style7">
+                <asp:Label ID="Label46" runat="server" Text="Automated vs Manual"></asp:Label>
+                                            </td>
+        <td>
+                <asp:Label ID="Label47" runat="server" Text="Description"></asp:Label>
+                                            </td>
+    </tr>
+    <tr>
+        <td class="style7">
+                <asp:RadioButtonList ID="radioAutoManual0" runat="server" Height="125px" 
+                    Width="39px">
+                    <asp:ListItem>1</asp:ListItem>
+                    <asp:ListItem>2</asp:ListItem>
+                    <asp:ListItem>3</asp:ListItem>
+                    <asp:ListItem>4</asp:ListItem>
+                    <asp:ListItem>5</asp:ListItem>
+                </asp:RadioButtonList>
+                                            </td>
+        <td>
+            <asp:BulletedList ID="BulletedList3" runat="server">
+                <asp:ListItem>1 = Primary controls in the process are manual, requiring human intervention and multiple touch points within and outside the department, and are not tested. </asp:ListItem>
+                <asp:ListItem>2 = Primary controls in the process are manual with significant human intervention and multiple touch points within the department and testing is ad-hoc, after a triggering event (failure) has occurred.  </asp:ListItem>
+                <asp:ListItem>3 = Primary controls in the process are partially automated w/ moderation human intervention and multiple touch points within and outside the department and are periodically tested based on information procedures.  </asp:ListItem>
+                <asp:ListItem>4 = Primary controls are partially automated w/minimal human intervention and are regularly tested based on a formally established schedule.  </asp:ListItem>
+                <asp:ListItem>5 = Primary controls are fully automated w/out requiring human intervention and are tested on an on-going basis to ensure effectiveness. </asp:ListItem>
+            </asp:BulletedList>
+        </td>
+    </tr>
+    <tr>
+        <td class="style7">
+                <asp:Label ID="Label52" runat="server" Text="Policies &amp; Procedures"></asp:Label>
+                                            </td>
+        <td>
+                <asp:Label ID="Label53" runat="server" Text="Description"></asp:Label>
+                                            </td>
+    </tr>
+    <tr>
+        <td class="style7">
+                <asp:RadioButtonList ID="radioPolicies0" runat="server" Height="112px" 
+                    Width="53px">
+                    <asp:ListItem>1</asp:ListItem>
+                    <asp:ListItem>2</asp:ListItem>
+                    <asp:ListItem>3</asp:ListItem>
+                    <asp:ListItem>4</asp:ListItem>
+                    <asp:ListItem>5</asp:ListItem>
+                </asp:RadioButtonList>
+                                            </td>
+        <td>
+            <asp:BulletedList ID="BulletedList4" runat="server">
+                <asp:ListItem>1 = Policies and Procedures are not documented. </asp:ListItem>
+                <asp:ListItem>2 = Policies and Procedures are informally documented, communicated, access is restricted and they are not updated for accuracy of content.   </asp:ListItem>
+                <asp:ListItem>3 = Policies and Procedures are formally documented, informally communicated, access is restricted, and are infrequently (&gt;+1) reviewed and updated for accuracy of content. Signoff is not attained for understanding.   </asp:ListItem>
+                <asp:ListItem>4 = Policies and Procedures are formally documented, communicated, accessible upon request, and are reviewed and updated on a periodic basis for accuracy of content. Signoff is not attained for understanding.   </asp:ListItem>
+                <asp:ListItem>5 = Policies and Procedures are formally documented, communicated, readily accessible and are reviewed and updated on an on-going basis for accuracy of content. Signoff is attained for understanding. </asp:ListItem>
+            </asp:BulletedList>
+        </td>
+    </tr>
+    <tr>
+        <td class="style7">
+                <asp:Label ID="Label59" runat="server" Text="Control Effectiveness"></asp:Label>
+                                            </td>
+        <td>
+                <asp:Label ID="controlEffectiveLabel0" runat="server"></asp:Label>
+                                            </td>
+    </tr>
+</table>
+<table class="style4">
+    <tr>
+        <td>
+                <asp:CheckBox ID="controlDefCheckBox" runat="server" Text="Control Deficiency?" 
+                                                    oncheckedchanged="controlDefCheckBox_CheckedChanged" AutoPostBack="True" />
+                                            </td>
+    </tr>
+    <tr>
+        <td>
+                                                <asp:TextBox ID="deficiencyDetailTextBox" 
+                runat="server" Height="131px" 
+                                                    Width="464px" Visible="False" 
+                TextMode="MultiLine"></asp:TextBox>
+                                            </td>
+    </tr>
+</table>
+<table class="style4">
+    <tr>
+        <td class="style8">
+                <asp:Label ID="Label60" runat="server" Text="Residual Probability"></asp:Label>
+                                            </td>
+        <td>
+                                                <asp:Label ID="Label63" runat="server" Text="Description"></asp:Label>
+                                            </td>
+    </tr>
+    <tr>
+        <td class="style8">
+                <asp:RadioButtonList ID="RadioButtonList2" runat="server" Height="103px" 
+                    Width="77px">
+                    <asp:ListItem>1</asp:ListItem>
+                    <asp:ListItem>2</asp:ListItem>
+                    <asp:ListItem>3</asp:ListItem>
+                </asp:RadioButtonList>
+                                            </td>
+        <td>
+            &nbsp;</td>
+    </tr>
+</table>
+<table style="width: 274px">
+    <tr>
+        <td class="style10">
+                <asp:Label ID="Label61" runat="server" Text="Residual Risk Score"></asp:Label>
+                                            </td>
+        <td class="style9">
+                <asp:Label ID="residualRiskScoreLabel0" runat="server"></asp:Label>
+                                            </td>
+    </tr>
+    <tr>
+        <td class="style11">
+                <asp:Label ID="Label62" runat="server" Text="Risk Strategy"></asp:Label>
+                                            </td>
+        <td>
+                <asp:DropDownList ID="DropDownList2" runat="server" Height="30px" Width="114px">
+                    <asp:ListItem>Accept</asp:ListItem>
+                    <asp:ListItem>Mitigate</asp:ListItem>
+                </asp:DropDownList>
+                                            </td>
+    </tr>
+    <tr>
+        <td class="style11">
+            &nbsp;</td>
+        <td>
+                <asp:Button ID="clearButton0" runat="server" Text="Clear" Width="80px" />
+                <asp:Button ID="saveButton0" runat="server" onclick="saveButton_Click" 
+                    Text="Save" Width="75px" />
+                                            </td>
+    </tr>
+    <tr>
+        <td class="style11">
+            &nbsp;</td>
+        <td>
+                <asp:Button ID="cancelButton0" runat="server" onclick="cancelButton_Click" 
+                    Text="Cancel Risk Assessment" Width="174px" />
+                                            </td>
+    </tr>
+</table>
+</asp:Content>
+
