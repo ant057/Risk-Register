@@ -395,7 +395,7 @@ public partial class RiskDetail : System.Web.UI.Page
             {   //update Risk Table
 
                 try
-                {//some change in file
+                {
                     DataAccess.DataUtility.EntityRiskDetail entityRiskDetail = new DataAccess.DataUtility.EntityRiskDetail();
                     EntityRisk entityRisk = new EntityRisk();
                     entityRiskDetail = entityRisk.SelectEntityRisk(EntityRiskId);
