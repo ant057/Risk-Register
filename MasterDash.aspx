@@ -23,6 +23,7 @@ function switchViews(obj)
     }
 </script>
     <div>
+        &nbsp;
         <h2><b><asp:Label Text = "Risk Dashboard" ID="eLabel" runat="server"></asp:Label></b></h2>
         </div>
 
@@ -43,6 +44,7 @@ function switchViews(obj)
         <asp:TextBox ID="searchCriteriaText" runat="server" ></asp:TextBox>
         <asp:Button ID="searchButton" runat="server" CssClass="flatbutton" Text="Go" 
             onclick="searchButton_Click" />
+        <asp:Button ID="Button1" runat="server" PostBackUrl="~/RiskAssessment.aspx" Text="New Risk" CssClass="flatbutton" />
     <br />
 
 <%--        this begins the expandable grid view--%>

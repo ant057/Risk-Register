@@ -86,6 +86,21 @@ body>#Header {height:14px;}
 {
     border-collapse: collapse;
 }
+.MasterHeader {
+    border-style: groove;
+    border-color: #FFFFFF;
+    background-color: #d8d8d8;
+}
+
+.MasterHeaderSub {
+    border: thin groove #FFFFFF;
+    background-color: #E4E4E4;
+}
+
+.ApplicationBackground 
+{
+    background-color: #E4E4E4;
+}
 
 #Menu {
 	position:absolute;

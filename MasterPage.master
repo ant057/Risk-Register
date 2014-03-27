@@ -1,5 +1,7 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
 
+<%@ Register assembly="System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI" tagprefix="asp" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -14,36 +16,66 @@
     <script type="text/javascript" src=jquery.min.js></script>
     <script src=jquery-ui.min.js></script>
 
+
+
+    <style type="text/css">
+        .auto-style1 {
+            width: 100%;
+        }
+    </style>
+
+
+
 </head>
 
-<body style="height: 173px;">
-    <form id="form1" runat="server">
-            <div style="height: 176px">
-        &nbsp;<table &nbsp;<table align="left">
+<body>
+    <form id="form1" runat="server" class="ApplicationBackground">
+                <table class="auto-style1">
                     <tr>
-                        <td colspan="4">
-        <img alt="" src="ArgoGroupColorWTagline.jpg" 
-            style="height: 100px; width: 406px" /></td>
+                        <td colspan="2" class="MasterHeader">
+                            <img alt="" src="ArgoGroupColorWTaglineGrey1.jpg" style="height: 95px; width: 407px"/>
+                            <asp:Label ID="Label1" runat="server" Font-Bold="False" Font-Italic="True" Font-Names="Verdana" Font-Size="XX-Large" 
+                                ForeColor="#006699" Text="Risk Register Application">
+                            </asp:Label>
+                        </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td width="400px" class="MasterHeaderSub">
+                            <table class="auto-style1">
+                                <tr>
+                                    <td>
                             <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/MasterDash.aspx">Risk Dashboard</asp:HyperLink>
-                        </td>
-                        <td>
-                            <asp:HyperLink ID="riskAssessmentLink" runat="server" 
-                                NavigateUrl="~/RiskAssessment.aspx">Risk Assessment</asp:HyperLink>
-                        </td>
-                        <td>
+                                    </td>
+                                    <td>
                             <asp:HyperLink ID="riskRegisterLink" runat="server" 
                                 NavigateUrl="~/AggregatedScores.aspx">Aggregated Scores</asp:HyperLink>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                         <td>
-                            &nbsp;</td>
+                <asp:ScriptManager ID="ScriptManager1" runat="server">
+                    <Services>
+                        <asp:ServiceReference Path="~/WebService.asmx" />
+                    </Services>
+                </asp:ScriptManager>
+                        </td>
                     </tr>
                 </table>
-            </div>
-        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">       
-        </asp:ContentPlaceHolder>
+            <table width="100%">
+                <tr>
+                    <td width="25px">
+
+                    </td>
+                    <td width="95%">
+                        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">       
+                        </asp:ContentPlaceHolder>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
     </form>
 </body>
 </html>

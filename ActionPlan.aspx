@@ -1,15 +1,7 @@
 ﻿<%@ Page Title="Action Plan" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="ActionPlan.aspx.cs" Inherits="ActionPlan" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-    <style type="text/css">
-        .style3
-        {
-            width: 100%;
-        }
-        .auto-style1 {
-            height: 146px;
-        }
-    </style>
+
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <script>

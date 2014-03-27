@@ -400,6 +400,9 @@ public partial class RiskDetail : System.Web.UI.Page
                     EntityRisk entityRisk = new EntityRisk();
                     entityRiskDetail = entityRisk.SelectEntityRisk(EntityRiskId);
 
+                    DataAccess.DataUtility.EntityRiskDetail entityRiskDetailOld = new DataAccess.DataUtility.EntityRiskDetail();
+                    entityRiskDetailOld = entityRisk.SelectEntityRisk(EntityRiskId);
+
                     entityRiskDetail.ModifiedUserID = User.Identity.Name.ToString();
                     entityRiskDetail.Frequency = int.Parse(frequencyTextBox.Text);
                     entityRiskDetail.Severity = int.Parse(severityTextBox.Text);
@@ -413,63 +416,92 @@ public partial class RiskDetail : System.Web.UI.Page
 
                     entityRisk.UpdateEntityRisk(entityRiskDetail);
 
+                    //check if something updated, insert to risk log
+                    if(verifyChange(entityRiskDetail, entityRiskDetailOld))
+                    {
+                        EntityRiskLog log = new EntityRiskLog();
+                        EntityRiskLogDetail logDetail = new EntityRiskLogDetail();
+
+                        logDetail.Adjustment = entityRiskDetailOld.ResidualAdjustment.ToString();
+                        logDetail.DateModified = DateTime.Now;
+                        logDetail.EntityRiskId = EntityRiskId;
+                        logDetail.Frequency = entityRiskDetailOld.Frequency.ToString();
+                        logDetail.InherentRiskScore = entityRiskDetailOld.InherentRiskScore.ToString();
+                        logDetail.MitigatingControls = entityRiskDetailOld.MitigatingActionsDetail.ToString();
+                        logDetail.ModifiedUser = User.Identity.Name.ToString();
+                        logDetail.ResidualRiskScore = entityRiskDetailOld.ResidualRiskScore;
+                        logDetail.Severity = entityRiskDetailOld.Severity.ToString();
+
+                        Owner owner = new Owner();
+                        DataTable oldOwner = owner.SelectOwner(entityRiskDetailOld.OversightPartyId);
+
+                        logDetail.OversightParty = oldOwner.Rows[0]["Owner_Desc"].ToString();
+
+                        oldOwner.Rows.Clear();
+                        oldOwner = owner.SelectOwner(entityRiskDetailOld.PrimaryOwnerId);
+
+                        logDetail.PrimaryOwner = oldOwner.Rows[0]["Owner_Desc"].ToString();
+
+                        log.InsertEntityRisk(logDetail);
+                    }
+
                      //algorithm to detect what is a new entity association and what was removed
+                
+                    /*//update EntityRisk table
+                    List<EntityRiskDetail> entityRiskDetail = new List<EntityRiskDetail>();
+                    DataAccess.Data.EntityRisk entityRisk = new DataAccess.Data.EntityRisk();
+                    entityRiskDetail = entityRisk.SelectEntityRisk(RiskId);
 
-                    ////update EntityRisk table
-                    //List<EntityRiskDetail> entityRiskDetail = new List<EntityRiskDetail>();
-                    //DataAccess.Data.EntityRisk entityRisk = new DataAccess.Data.EntityRisk();
-                    //entityRiskDetail = entityRisk.SelectEntityRisk(RiskId);
+                    if (entityRiskDetail != null)
+                    {
+                        foreach (ListItem item in entityCheckBoxList.Items)
+                        {
 
-                    //if (entityRiskDetail != null)
-                    //{
-                    //    foreach (ListItem item in entityCheckBoxList.Items)
-                    //    {
+                            if (item.Selected)
+                            {
+                                bool isPresent = false;
 
-                    //        if (item.Selected)
-                    //        {
-                    //            bool isPresent = false;
+                                for (int i = 0; i < entityRiskDetail.Count; i++)
+                                {
+                                    if (int.Parse(item.Value) == entityRiskDetail[i].EntityId)
+                                    {
+                                        isPresent = true;
+                                    }
+                                }
 
-                    //            for (int i = 0; i < entityRiskDetail.Count; i++)
-                    //            {
-                    //                if (int.Parse(item.Value) == entityRiskDetail[i].EntityId)
-                    //                {
-                    //                    isPresent = true;
-                    //                }
-                    //            }
+                                if (isPresent == false)
+                                {
+                                    EntityRiskDetail newEntityRisk = new EntityRiskDetail();
+                                    newEntityRisk.EntityId = int.Parse(item.Value);
+                                    newEntityRisk.RiskId = RiskId;
+                                    entityRisk.InsertEntityRisk(newEntityRisk);
+                                }
+                            }
+                            else
+                            {
 
-                    //            if (isPresent == false)
-                    //            {
-                    //                EntityRiskDetail newEntityRisk = new EntityRiskDetail();
-                    //                newEntityRisk.EntityId = int.Parse(item.Value);
-                    //                newEntityRisk.RiskId = RiskId;
-                    //                entityRisk.InsertEntityRisk(newEntityRisk);
-                    //            }
-                    //        }
-                    //        else
-                    //        {
+                                for (int i = 0; i < entityRiskDetail.Count; i++)
+                                {
+                                    if (int.Parse(item.Value) == entityRiskDetail[i].EntityId)
+                                    {
+                                        entityRisk.DeleteEntityRisk(entityRiskDetail[i].EntityRiskId);
+                                    }
+                                }
 
-                    //            for (int i = 0; i < entityRiskDetail.Count; i++)
-                    //            {
-                    //                if (int.Parse(item.Value) == entityRiskDetail[i].EntityId)
-                    //                {
-                    //                    entityRisk.DeleteEntityRisk(entityRiskDetail[i].EntityRiskId);
-                    //                }
-                    //            }
+                            }
 
-                    //        }
-
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    foreach (ListItem item in entityCheckBoxList.Items)
-                    //    {
-                    //        EntityRiskDetail newEntityRisk = new EntityRiskDetail();
-                    //        newEntityRisk.EntityId = int.Parse(item.Value);
-                    //        newEntityRisk.RiskId = RiskId;
-                    //        entityRisk.InsertEntityRisk(newEntityRisk);
-                    //    }
-                    //}
+                        }
+                    }
+                    else
+                    {
+                        foreach (ListItem item in entityCheckBoxList.Items)
+                        {
+                            EntityRiskDetail newEntityRisk = new EntityRiskDetail();
+                            newEntityRisk.EntityId = int.Parse(item.Value);
+                            newEntityRisk.RiskId = RiskId;
+                            entityRisk.InsertEntityRisk(newEntityRisk);
+                        }
+                    }*/
 
 
                     //update action items - only if there exists an action plan
@@ -514,52 +546,6 @@ public partial class RiskDetail : System.Web.UI.Page
                             action.UpdateActionPlan(actionDetail);
                         }
 
-
-                        ////update entity action table
-                        //List<EntityActionDetail> entityActionDetail = new List<EntityActionDetail>();
-                        //DataAccess.Data.EntityAction entityAction = new DataAccess.Data.EntityAction();
-                        //entityActionDetail = entityAction.SelectEntityAction(actionDetail.ActionPlanID);
-
-                        //if (entityActionDetail != null)
-                        //{
-                        //    foreach (ListItem item in entityActionCheckBoxList.Items)
-                        //    {
-
-                        //        if (item.Selected)
-                        //        {
-                        //            bool isPresent = false;
-
-                        //            for (int i = 0; i < entityActionDetail.Count; i++)
-                        //            {
-                        //                if (int.Parse(item.Value) == entityActionDetail[i].EntityId)
-                        //                {
-                        //                    isPresent = true;
-                        //                }
-                        //            }
-
-                        //            if (isPresent == false)
-                        //            {
-                        //                EntityActionDetail newEntityAction = new EntityActionDetail();
-                        //                newEntityAction.EntityId = int.Parse(item.Value);
-                        //                newEntityAction.ActionId = actionDetail.ActionPlanID;
-                        //                entityAction.InsertEntityAction(newEntityAction);
-                        //            }
-                        //        }
-                        //        else
-                        //        {
-
-                        //            for (int i = 0; i < entityActionDetail.Count; i++)
-                        //            {
-                        //                if (int.Parse(item.Value) == entityActionDetail[i].EntityId)
-                        //                {
-                        //                    entityAction.DeleteEntityAction(entityActionDetail[i].EntityActionId);
-                        //                }
-                        //            }
-
-                        //        }
-
-                        //    }
-                        //}
                     }
 
                 }
@@ -813,7 +799,7 @@ public partial class RiskDetail : System.Web.UI.Page
         frequencyTextBox.Enabled = false;
         severityTextBox.Enabled = false;
         residualAdjustmentDDL.Enabled = false;
-        mitigatingControlsFTB.ReadOnly = true;
+        //mitigatingControlsFTB.ReadOnly = true;
         naCheckBox.Enabled = false;
 
         if (actionDetailTextBox.Text != "No Action Plan")
@@ -1015,5 +1001,38 @@ public partial class RiskDetail : System.Web.UI.Page
 
             SetScoreColors();
         }
+    }
+    protected void historyLinkBtn_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/RiskHistory.aspx?entityRiskId=" + EntityRiskId);
+    }
+
+    private bool verifyChange(EntityRiskDetail risk1, EntityRiskDetail risk2)
+    {
+        bool change = false;
+
+        string a = risk1.ToString();
+        string b = risk2.ToString();
+
+        if (!risk2.Frequency.Equals(risk1.Frequency))
+            change = true;
+        if (!risk2.InherentRiskScore.Equals(risk1.InherentRiskScore))
+            change = true;
+        if (!risk2.MitigatingActionsDetail.Equals(risk1.MitigatingActionsDetail))
+            change = true;
+        if (!risk2.ModifiedUserID.Equals(risk1.ModifiedUserID))
+            change = true;
+        if (!risk2.OversightPartyId.Equals(risk1.OversightPartyId))
+            change = true;
+        if (!risk2.PrimaryOwnerId.Equals(risk1.PrimaryOwnerId))
+            change = true;
+        if (!risk2.ResidualAdjustment.Equals(risk1.ResidualAdjustment))
+            change = true;
+        if (!risk2.ResidualRiskScore.Equals(risk1.ResidualRiskScore))
+            change = true;
+        if (!risk2.Severity.Equals(risk1.Severity))
+            change = true;
+
+        return change;
     }
 }

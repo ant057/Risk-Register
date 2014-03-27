@@ -12,10 +12,10 @@
     <script>
 
           $(document).ready(function () {
-              $("#ContentPlaceHolder1_completedDateTextBox").datepicker();
+              $("#ctl00_ContentPlaceHolder1_completedDateTextBox").datepicker();
           });
           $(document).ready(function () {
-              $("#ContentPlaceHolder1_implementDateTextBox").datepicker();
+              $("#ctl00_ContentPlaceHolder1_implementDateTextBox").datepicker();
           });
           
   </script>
@@ -86,6 +86,22 @@
             <tr>
                 <td class="SubTitle" style="width: 10%">
                                     <asp:Label ID="Label93" runat="server" Text="Risk ID"></asp:Label>
+
+
+                                &nbsp;
+                                    
+
+
+                                    
+
+
+
+                                    <asp:LinkButton ID="historyLinkBtn" runat="server" OnClick="historyLinkBtn_Click">History</asp:LinkButton>
+                                    
+
+
+                                    
+
 
 
                                 </td>
