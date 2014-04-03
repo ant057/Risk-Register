@@ -128,7 +128,7 @@ public partial class RiskDetail : System.Web.UI.Page
         ddlPrimaryOwner.SelectedValue = riskDetail.PrimaryOwnerID.ToString();
 
         //entity risk details
-        riskIdLabel.Text = enttiyRiskDetail.EntityRiskId.ToString();
+        riskIdLabel.Text = RiskId.ToString();
         string frequency = enttiyRiskDetail.Frequency.ToString();
         if (frequency == "0") {ListItem frequencyListItem = new ListItem("N/A", "0"); frequencyTextBox.Items.Clear(); frequencyTextBox.Items.Add(frequencyListItem); }
         else 
@@ -262,6 +262,7 @@ public partial class RiskDetail : System.Web.UI.Page
             entityCheckBoxList.Items.Add(item);
         }
 
+        risksTreeView.Nodes.Add(new TreeNode("RiskID-" + RiskId.ToString() , RiskId.ToString() , "~/Images/folder.png"));
 
         DataAccess.Data.EntityRisk entityRisk = new DataAccess.Data.EntityRisk();
         List<DataAccess.DataUtility.EntityRiskDetail> erDetail = new List<DataAccess.DataUtility.EntityRiskDetail>();
@@ -270,6 +271,18 @@ public partial class RiskDetail : System.Web.UI.Page
 
         foreach (EntityRiskDetail item in erDetail)
         {
+            string entityNode = string.Empty;
+
+            foreach (EntityDetail entDetail in entities)
+            {
+                if (item.EntityId == entDetail.EntityId)
+                {
+                    entityNode = entDetail.EntityName;
+                }
+            }
+
+            risksTreeView.Nodes[0].ChildNodes.Add(new TreeNode(entityNode, item.EntityRiskId.ToString(), "~/Images/folder.png", "~/RiskDetail.aspx?entityRiskId=" + item.EntityRiskId.ToString(), ""));
+
             for (int i = 0; i < entityCheckBoxList.Items.Count; i++)
             {
                 if (item.EntityId.ToString() == entityCheckBoxList.Items[i].Value)
@@ -1035,4 +1048,5 @@ public partial class RiskDetail : System.Web.UI.Page
 
         return change;
     }
+
 }

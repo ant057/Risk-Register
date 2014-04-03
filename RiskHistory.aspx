@@ -102,6 +102,7 @@
                 <asp:Label ID="riskLabel" runat="server"></asp:Label>
             </td>
             <td width="25px">&nbsp;</td>
+            <td width="50%">&nbsp;</td>
             <td>&nbsp;</td>
         </tr>
         <tr>
@@ -110,6 +111,7 @@
                 <asp:Label ID="entityLabel" runat="server"></asp:Label>
             </td>
             <td width="25px">&nbsp;</td>
+            <td width="50%">&nbsp;</td>
             <td>&nbsp;</td>
         </tr>
         <tr>
@@ -118,9 +120,11 @@
             </td>
             <td width="25px">
                 &nbsp;</td>
-            <td class="TitleBar">
+            <td class="TitleBar" width="50%">
                 <asp:Label ID="Label21" runat="server" Text="Risk Scenario"></asp:Label>
             </td>
+            <td>
+                &nbsp;</td>
         </tr>
         <tr>
             <td width="20%" rowspan="2">
@@ -130,15 +134,17 @@
             <td width="25px">
                 &nbsp;
             </td>
-            <td>
+            <td width="50%">
                 <asp:Label ID="scenarioLabel" runat="server"></asp:Label>
             </td>
+            <td>
+                &nbsp;</td>
         </tr>
         <tr>
             <td width="25px">
                 &nbsp;</td>
-            <td>
-                <asp:Panel ID="Panel1" runat="server" Height="275px">
+            <td width="50%">
+                <asp:Panel ID="Panel1" runat="server" Height="275px" Width="100%">
                     <table frame="border" style="border-style: groove; table-layout: auto; border-spacing: inherit; list-style-type: none;">
                         <tr>
                             <td width="400px">
@@ -204,6 +210,8 @@
                     </table>
                 </asp:Panel>
             </td>
+            <td>
+                &nbsp;</td>
         </tr>
         <tr>
             <td width="20%">
@@ -212,13 +220,18 @@
             <td width="25px">
                 
                 &nbsp;</td>
-            <td>
+            <td width="50%">
                 
             </td>
+            <td>
+                
+                &nbsp;</td>
         </tr>
         <tr>
             <td width="20%">&nbsp;</td>
             <td width="25px">
+                &nbsp;</td>
+            <td width="50%">
                 &nbsp;</td>
             <td>
                 &nbsp;</td>
