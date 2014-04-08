@@ -51,7 +51,8 @@ public partial class MasterDash : System.Web.UI.Page
             if (!Page.IsPostBack)
             {
                 ViewState.Add("ControlCounter", 0);
-                //bindMasterRisk();
+
+                bindEntityDDL();
 
                 if (Request.QueryString["masterRiskId"] != null)
                 {
@@ -108,6 +109,22 @@ public partial class MasterDash : System.Web.UI.Page
 
     //    Response.Redirect(qryString);
     //}
+
+    private void bindEntityDDL()
+    {
+        List<EntityDetail> entities = new List<EntityDetail>();
+        Entity entity = new Entity();
+
+        entities = entity.SelectAllEntity();
+
+        foreach(EntityDetail e in entities)
+        {
+            ListItem item = new ListItem(e.EntityName, e.EntityId.ToString());
+            entityExportddl.Items.Add(item);
+        }
+
+        entityExportddl.Items.Insert(0, "--Select--");
+    }
 
     protected void riskDetailGridView_RowDataBound(object sender, GridViewRowEventArgs e)
     {
@@ -209,4 +226,43 @@ public partial class MasterDash : System.Web.UI.Page
     }
 
 
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (entityExportddl.SelectedIndex != 0)
+            {
+                DataTable dtRisk = new DataTable();
+                Risk risk = new Risk();
+
+                dtRisk = risk.RiskDetailExport(int.Parse(entityExportddl.SelectedValue));
+
+                DataTable dtexcel;
+                dtexcel = dtRisk.Copy();
+
+                if (dtexcel.Rows.Count > 0)
+                {
+                    Response.Clear();
+                    Response.Charset = "";
+                    Response.AddHeader("content-disposition", "attachment;filename=" + entityExportddl.SelectedItem.Text.ToString()  + "-RiskRegister.xls");
+                    Response.ContentType = "application/vnd.ms-excel";
+                    System.IO.StringWriter stringWrite = new System.IO.StringWriter();
+                    System.Web.UI.HtmlTextWriter htmlWrite = new System.Web.UI.HtmlTextWriter(stringWrite);
+
+                    DetailsView view = new DetailsView();
+
+                    view.DataSource = dtexcel;
+                    view.DataBind();
+
+                    view.RenderControl(htmlWrite);
+                    Response.Write(stringWrite.ToString());
+                }
+                Response.End();
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
 }

@@ -280,7 +280,7 @@
 
                 </td>
                 <td width="6%">
-                    <asp:Panel runat="server" Height="565px">
+                    <asp:Panel runat="server" Height="565px" BorderColor="#013B82" BorderStyle="Solid">
                         <asp:TreeView ID="risksTreeView" runat="server">
                         </asp:TreeView>
                     </asp:Panel>

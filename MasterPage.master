@@ -37,6 +37,8 @@
                             <asp:Label ID="Label1" runat="server" Font-Bold="False" Font-Italic="True" Font-Names="Verdana" Font-Size="XX-Large" 
                                 ForeColor="#006699" Text="Risk Register Application">
                             </asp:Label>
+                        &nbsp;
+                            <asp:Label ID="welcomeLabel" runat="server" Font-Italic="True" Text="Welcome, "></asp:Label>
                         </td>
                     </tr>
                     <tr>

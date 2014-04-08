@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+//using System.Security.Principal;
 
 public partial class MasterPage : System.Web.UI.MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        
+        if (!Page.IsPostBack)
+        {
+            welcomeLabel.Text = welcomeLabel.Text.ToString() + Page.User.Identity.Name.ToString();
+        }
     }
 }

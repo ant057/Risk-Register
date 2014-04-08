@@ -130,7 +130,8 @@ border: 1px solid #000000;
     font-weight:bold;     cursor:hand;
     filter:progid:DXImageTransform.Microsoft.Gradient(
 		GradientType=0,StartColorStr='#ffffffff',EndColorStr='#ffcccccc');
-    }
+    height: 23px;
+}
 
 
 .hidden

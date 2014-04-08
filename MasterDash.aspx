@@ -36,7 +36,7 @@ function switchViews(obj)
             RepeatDirection="Horizontal">
             <asp:ListItem>Group</asp:ListItem>
             <asp:ListItem Selected="True">Segment</asp:ListItem>
-            <asp:ListItem>Emerging</asp:ListItem>
+            <asp:ListItem>Consolidated Segment</asp:ListItem>
         </asp:RadioButtonList>
         <asp:Label ID="updateLabel" runat="server"></asp:Label>
         <br />
@@ -46,8 +46,23 @@ function switchViews(obj)
             onclick="searchButton_Click" />
         <asp:Button ID="Button1" runat="server" PostBackUrl="~/RiskAssessment.aspx" Text="New Risk" CssClass="flatbutton" />
     <br />
+        <table width="100%">
+            <tr>
+                <td>
 
-<%--        this begins the expandable grid view--%>
+                </td>
+                <td width="20%">
+
+&nbsp;<asp:Label ID="Label8" runat="server" Font-Bold="True" Text="Select Entity :"></asp:Label>
+
+                    <asp:DropDownList ID="entityExportddl" runat="server">
+                    </asp:DropDownList>
+&nbsp;<asp:Button ID="Button2" runat="server" CssClass="flatbutton" OnClick="Button2_Click" Text="Export" />
+
+                </td>
+            </tr>
+        </table>
+        <%--        this begins the expandable grid view--%>
         <asp:GridView ID="GridView1" runat="server"
                 AutoGenerateColumns="False" DataKeyNames="RiskID"
                 DataSourceID="SqlDataSource1" OnRowDataBound="gv_RowDataBound"
@@ -70,7 +85,7 @@ function switchViews(obj)
                 </asp:HyperLinkField>     
                <asp:BoundField DataField="RiskType" HeaderText="RiskType" SortExpression="RiskType" />
                 <asp:BoundField DataField="RiskSource" HeaderText="RiskSource" SortExpression="RiskSource" />
-                <asp:BoundField DataField="RiskScenario" HeaderText="RiskScenario" SortExpression="RiskScenario" />
+                <asp:BoundField DataField="RiskScenario" HeaderText="RiskScenario" SortExpression="RiskScenario" ItemStyle-Wrap="true" ItemStyle-HorizontalAlign="Left" ItemStyle-Font-Bold="true" />
 <%--                <asp:BoundField DataField="PrimaryOwner" HeaderText="PrimaryOwner" SortExpression="PrimaryOwner" />
                 <asp:BoundField DataField="OversightParty" HeaderText="OversightParty" SortExpression="OversightParty" />--%>
                 <asp:TemplateField>
