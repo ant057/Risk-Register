@@ -83,10 +83,7 @@
         </table>
         <table width="100%">
             <tr>
-                <td width="2%">
-                    
-                </td>
-                <td width="40%">
+                <td width="45%">
                     <table width="100%">
                         <tr>
                             <td colspan ="2" class="TitleBar">
@@ -123,7 +120,7 @@
                         <tr>
                             <td class="SubTitle" width="25%">
 
-                                    <asp:Label runat="server" Text="Entity"></asp:Label>
+                                    <asp:Label runat="server" Text="Business Unit"></asp:Label>
 
 
                             </td>
@@ -231,11 +228,11 @@
                         </tr>
                     </table>
                 </td>
-                <td width="3%">
+                <td width="1%">
                     
                 </td>
-                <td width="40%">
-                    <asp:Panel runat="server" Height="274px">
+                <td width="45%">
+                    <asp:Panel runat="server" Height="275px">
                         <table width="100%">
                               <tr>
                                   <td colspan="2" class="TitleBar">
@@ -244,51 +241,32 @@
                              </tr>
                               <tr>
                                   <td>
-                                     <asp:TextBox ID="riskScenarioTextBox" runat="server" Height="205px" 
-                                                                Width="550px" TextMode="MultiLine" ReadOnly="True"></asp:TextBox>
+                                     <asp:TextBox ID="riskScenarioTextBox" runat="server" Height="235px" 
+                                                                Width="625px" TextMode="MultiLine" ReadOnly="True"></asp:TextBox>
                                   </td>
                               </tr>
                         </table>
                     </asp:Panel>
                     
                 </td>
-                <td width="10%">
+                <td width="9%">
                     
                 </td>
             </tr>
 
-            <tr>
-                <td width="2%">
-                    
-                    &nbsp;</td>
-                <td width="40%">
-                    &nbsp;</td>
-                <td width="3%">
-                    
-                    &nbsp;</td>
-                <td width="40%">
-                    &nbsp;</td>
-                <td width="10%">
-                    
-                    &nbsp;</td>
-            </tr>
-
-        </table>
+            </table>
         <table width="100%">
             <tr>
                 <td width="2%">
-
-                </td>
-                <td width="6%">
-                    <asp:Panel runat="server" Height="565px" BorderColor="#013B82" BorderStyle="Solid">
+                    <asp:Panel runat="server" Height="585px" BorderColor="#013B82" BorderStyle="Solid">
                         <asp:TreeView ID="risksTreeView" runat="server">
                         </asp:TreeView>
                     </asp:Panel>
                 </td>
-                <td width="60%">
+                <td width="45%">
                         <table width="100%">
                             <tr>
-                                <td colspan="2" class="TitleBar" width="20%">
+                                <td colspan="4" class="TitleBar" width="20%">
                                     <asp:Label ID="Label95" runat="server" Font-Bold="True" Font-Size="Large" 
                                     Text="Inherent Risk Scoring:"></asp:Label>
                                     <asp:Label ID="entityTitleLabel" runat="server"></asp:Label>
@@ -300,7 +278,7 @@
                                     <asp:ImageButton ID="defImageButton1" runat="server" Height="17px" 
                                     ImageUrl="~/QuestionMark.jpg" Width="23px" onclientclick="definitions();" />
                                 </td>
-                                <td width="100%" class="DataCell">
+                                <td width="100%" class="DataCell" colspan="3">
                                     <asp:DropDownList ID="frequencyTextBox" runat="server" AutoPostBack="True" 
                                         Enabled="False" Height="22px" 
                                         onselectedindexchanged="frequencyTextBox_SelectedIndexChanged">
@@ -324,6 +302,16 @@
                                         onselectedindexchanged="severityTextBox_SelectedIndexChanged">
                                     </asp:DropDownList>
                                 </td>
+                                <td id="calcIVlbltd" class="SubTitle">
+
+                                    <asp:Label ID="Label97" runat="server" Text="Calculated Value"></asp:Label>
+
+                                </td>
+                                <td id="calcIVtd" class="DataCell">
+
+                                    <asp:Label ID="calcIValueLabel" runat="server"></asp:Label>
+
+                                </td>
                             </tr>
                             <tr>
                                 <td width="20%" class="SubTitle">
@@ -333,9 +321,19 @@
                                     <asp:TextBox ID="riskScoreTextBox" runat="server" ReadOnly="True" 
                                         Font-Bold="True"></asp:TextBox>
                                 </td>
+                                <td id="calcISlbltd" class="SubTitle">
+
+                                    <asp:Label ID="Label98" runat="server" Text="Calculated Score"></asp:Label>
+
+                                </td>
+                                <td id="calcIStd" class="DataCell">
+
+                                    <asp:Label ID="calcIScoreLabel" runat="server"></asp:Label>
+
+                                </td>
                             </tr>
                             <tr>
-                                <td colspan="2" class="TitleBar" width="20%">
+                                <td colspan="4" class="TitleBar" width="20%">
                                     <asp:Label ID="Label12" runat="server" Font-Bold="True" Font-Size="Large" 
                                     Text="Controls / Residual Detail:"></asp:Label>
                                     &nbsp;<asp:Label ID="entityTitleLabel0" runat="server"></asp:Label>
@@ -345,7 +343,7 @@
                                 <td class="SubTitle" width="20%">
                                     <asp:Label ID="Label16" runat="server" Text="Mitigating Controls / Actions"></asp:Label>
                                 </td>
-                                <td class="DataCell" width="100%">
+                                <td class="DataCell" width="100%" colspan="3">
                                     <FTB:FreeTextBox id="mitigatingControlsFTB" runat="Server" 
                         AllowHtmlMode="False" ReadOnly="False" Height="250px" Width="500px" />
                                 </td>
@@ -363,6 +361,16 @@
                                     onselectedindexchanged="residualAdjustmentDDL_SelectedIndexChanged">
                                     </asp:DropDownList>
                                 </td>
+                                <td id="calcRVlbltd" class="SubTitle">
+
+                                    <asp:Label ID="Label99" runat="server" Text="Calculated Value"></asp:Label>
+
+                                </td>
+                                <td id="calcRVtd" class="DataCell">
+
+                                    <asp:Label ID="calcRValueLabel" runat="server"></asp:Label>
+
+                                </td>
                             </tr>
                             <tr>
                                 <td class="SubTitle" width="20%">
@@ -372,6 +380,16 @@
                                     <asp:TextBox ID="residualScoreText" runat="server" ReadOnly="True" 
                                     Width="146px" Font-Bold="True"></asp:TextBox>
                                 </td>
+                                <td id="calcRSlbltd" class="SubTitle">
+
+                                    <asp:Label ID="Label100" runat="server" Text="Calculated Score"></asp:Label>
+
+                                </td>
+                                <td id="calcRStd" class="DataCell">
+
+                                    <asp:Label ID="calcRScoreLabel" runat="server"></asp:Label>
+
+                                </td>
                             </tr>
                             <tr>
                                 <td width="20%"></td>
@@ -379,11 +397,11 @@
                             </tr>
                         </table>
                 </td>                
-                <td width="2%">
+                <td width="1%">
 
                 </td>
-                <td width="30%">
-                    <asp:Panel runat="server" Height="565px">
+                <td width="45%">
+                    <asp:Panel runat="server" Height="585px">
                         <table width="100%">
                             <tr>
                                 <td colspan="2" class="TitleBar">
@@ -518,13 +536,13 @@
                 <td width="2%">
 
                 </td>
-                <td width="6%">
+                <td width="45%">
 
                 </td>
-                <td width="60%">
+                <td width="1%">
 
                 </td>
-                <td width="2%">
+                <td width="45%">
 
                 </td>
                 <td width="30%">
@@ -538,13 +556,13 @@
                 <td width="2%">
 
                 </td>
-                <td width="6%">
+                <td width="45%">
 
                 </td>
-                <td width="60%">
+                <td width="1%">
 
                 </td>
-                <td width="2%">
+                <td width="45%">
 
                 </td>
                 <td width="30%">
@@ -565,7 +583,7 @@
                 </td>
                 <td>
                 <asp:Button ID="excelButton" runat="server" Text="Excel Export" Width="95px" 
-                        onclick="excelButton_Click" CssClass="flatbutton" />
+                        onclick="excelButton_Click" CssClass="flatbutton" Visible="False" />
                 </td>
             </tr>
         </table>

@@ -170,6 +170,23 @@ public partial class RiskDetail : System.Web.UI.Page
      // bindRiskOwnerListBox(RiskId);
         bindEntityCBList();
 
+        if (entityTitleLabel.Text == "Consolidated Segment")
+        {
+            DataTable consolidatedScore = entityRisk.SelectConsolidatedScores(EntityRiskId);
+
+            if (consolidatedScore != null)
+            {
+                calcIValueLabel.Text = consolidatedScore.Rows[0]["Inherent_Risk_Value"].ToString();
+                calcIScoreLabel.Text = consolidatedScore.Rows[0]["Inherent_Risk_Score"].ToString();
+                calcRValueLabel.Text = consolidatedScore.Rows[0]["Residual_Risk_Value"].ToString();
+                calcRScoreLabel.Text = consolidatedScore.Rows[0]["Residual_Risk_Score"].ToString();
+            }
+        }
+        else
+        {
+            
+        }
+
         if(actionDetail != null)
         {
             ActionPlanId = actionDetail.ActionPlanID;

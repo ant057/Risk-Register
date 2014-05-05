@@ -34,9 +34,9 @@ function switchViews(obj)
         <asp:RadioButtonList ID="dashButtonList" runat="server" AutoPostBack="True" 
             onselectedindexchanged="dashButtonList_SelectedIndexChanged" 
             RepeatDirection="Horizontal">
-            <asp:ListItem>Group</asp:ListItem>
-            <asp:ListItem Selected="True">Segment</asp:ListItem>
-            <asp:ListItem>Consolidated Segment</asp:ListItem>
+            <asp:ListItem>Group (Corporate)</asp:ListItem>
+            <asp:ListItem Selected="True">Business Unit</asp:ListItem>
+            <asp:ListItem>Group &amp; Consolidated</asp:ListItem>
         </asp:RadioButtonList>
         <asp:Label ID="updateLabel" runat="server"></asp:Label>
         <br />
@@ -51,9 +51,9 @@ function switchViews(obj)
                 <td>
 
                 </td>
-                <td width="20%">
+                <td width="30%">
 
-&nbsp;<asp:Label ID="Label8" runat="server" Font-Bold="True" Text="Select Entity :"></asp:Label>
+&nbsp;<asp:Label ID="Label8" runat="server" Font-Bold="True" Text="Select Register :"></asp:Label>
 
                     <asp:DropDownList ID="entityExportddl" runat="server">
                     </asp:DropDownList>
@@ -78,7 +78,7 @@ function switchViews(obj)
                         </ItemTemplate>
                </asp:TemplateField> 
                <asp:BoundField DataField="RiskID" HeaderText="RiskID" SortExpression="RiskID" ShowHeader="False" />
-               <asp:HyperLinkField DataNavigateUrlFields="RiskID" DataNavigateUrlFormatString="../RiskRegister/MasterRisk.aspx?riskId={0}"
+               <asp:HyperLinkField DataNavigateUrlFields="RiskID" DataNavigateUrlFormatString="MasterRisk.aspx?riskId={0}"
                     DataTextField="RiskID" HeaderText="RiskID">
                     <ItemStyle HorizontalAlign="Center" Wrap="False" />
                     <HeaderStyle Width="40px" />
@@ -101,7 +101,7 @@ function switchViews(obj)
                                             <AlternatingRowStyle BackColor="Silver" />
                                             <RowStyle Font-Bold="true" />
                                             <Columns>
-                                                <asp:HyperLinkField DataNavigateUrlFields="EntityRiskID" DataNavigateUrlFormatString="../RiskRegister/RiskDetail.aspx?entityRiskId={0}"
+                                                <asp:HyperLinkField DataNavigateUrlFields="EntityRiskID" DataNavigateUrlFormatString="RiskDetail.aspx?entityRiskId={0}"
                                                     DataTextField="EntityRiskID" HeaderText="EntityRiskID">
                                                     <ItemStyle HorizontalAlign="Center" Wrap="False" />
                                                     <HeaderStyle Width="40px" />
@@ -122,7 +122,7 @@ function switchViews(obj)
            </Columns>
         </asp:GridView>
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="Data Source=Antdawg\SQLExpress;Initial Catalog=RiskRegister;Integrated Security=True"
-                SelectCommand="EXEC [dbo].[MasterRiskAll] 'Segment'" SelectCommandType="Text">
+                SelectCommand="EXEC [dbo].[MasterRiskAll] 'Business Unit'" SelectCommandType="Text">
         </asp:SqlDataSource>
 
 

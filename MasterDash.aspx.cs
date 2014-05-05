@@ -89,7 +89,7 @@ public partial class MasterDash : System.Web.UI.Page
             }
             else
             {
-
+                dashButtonList_SelectedIndexChanged(null, null);
             }
 
         }
@@ -224,24 +224,57 @@ public partial class MasterDash : System.Web.UI.Page
         GridView1.DataBind();
 
     }
+	
+	private DataTable getRegisterData(int entityId)
+	{
+        string connectionString = WebConfigurationManager.ConnectionStrings["RiskRegister"].ConnectionString;
 
+        SqlConnection con = new SqlConnection(connectionString);
+            SqlCommand com = new SqlCommand("[dbo].[RiskRegisterExport]", con);
+            com.CommandType = CommandType.StoredProcedure;
+            DataTable dtReturn = new DataTable("RiskRegister");
+            SqlDataAdapter adapter = new SqlDataAdapter(com);
+
+            try
+            {
+                com.Parameters.Add(new SqlParameter("@EntityId", SqlDbType.Int, 8));
+                com.Parameters["@EntityId"].Value = entityId;
+
+                con.Open();
+
+                adapter.Fill(dtReturn);
+
+                if (dtReturn.Rows.Count > 0)
+                    return dtReturn;
+                else
+                    return null;
+
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Data error");
+            }
+            finally
+            {
+                con.Close();
+            }
+	}
 
     protected void Button2_Click(object sender, EventArgs e)
     {
-        try
-        {
+
             if (entityExportddl.SelectedIndex != 0)
             {
                 DataTable dtRisk = new DataTable();
                 Risk risk = new Risk();
 
-                dtRisk = risk.RiskDetailExport(int.Parse(entityExportddl.SelectedValue));
+                dtRisk = getRegisterData(int.Parse(entityExportddl.SelectedValue));
 
-                DataTable dtexcel;
-                dtexcel = dtRisk.Copy();
-
-                if (dtexcel.Rows.Count > 0)
+                if (dtRisk != null)
                 {
+					DataTable dtexcel;
+					dtexcel = dtRisk.Copy();
+				
                     Response.Clear();
                     Response.Charset = "";
                     Response.AddHeader("content-disposition", "attachment;filename=" + entityExportddl.SelectedItem.Text.ToString()  + "-RiskRegister.xls");
@@ -249,7 +282,7 @@ public partial class MasterDash : System.Web.UI.Page
                     System.IO.StringWriter stringWrite = new System.IO.StringWriter();
                     System.Web.UI.HtmlTextWriter htmlWrite = new System.Web.UI.HtmlTextWriter(stringWrite);
 
-                    DetailsView view = new DetailsView();
+                    GridView view = new GridView();
 
                     view.DataSource = dtexcel;
                     view.DataBind();
@@ -259,10 +292,6 @@ public partial class MasterDash : System.Web.UI.Page
                 }
                 Response.End();
             }
-        }
-        catch (Exception ex)
-        {
 
-        }
     }
 }
