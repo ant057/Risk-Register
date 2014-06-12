@@ -34,9 +34,9 @@ function switchViews(obj)
         <asp:RadioButtonList ID="dashButtonList" runat="server" AutoPostBack="True" 
             onselectedindexchanged="dashButtonList_SelectedIndexChanged" 
             RepeatDirection="Horizontal">
-            <asp:ListItem>Group (Corporate)</asp:ListItem>
+            <asp:ListItem>Corporate</asp:ListItem>
             <asp:ListItem Selected="True">Business Unit</asp:ListItem>
-            <asp:ListItem>Group &amp; Consolidated</asp:ListItem>
+            <asp:ListItem>Argo Group (Consolidated)</asp:ListItem>
         </asp:RadioButtonList>
         <asp:Label ID="updateLabel" runat="server"></asp:Label>
         <br />

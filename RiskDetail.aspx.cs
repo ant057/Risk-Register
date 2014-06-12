@@ -170,7 +170,7 @@ public partial class RiskDetail : System.Web.UI.Page
      // bindRiskOwnerListBox(RiskId);
         bindEntityCBList();
 
-        if (entityTitleLabel.Text == "Consolidated Segment")
+        if (entityTitleLabel.Text == "Consolidated Business Unit")
         {
             DataTable consolidatedScore = entityRisk.SelectConsolidatedScores(EntityRiskId);
 

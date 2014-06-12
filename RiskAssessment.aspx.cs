@@ -120,7 +120,7 @@ public partial class RiskAssessment : System.Web.UI.Page
 
     protected void cancelButton_Click(object sender, EventArgs e)
     {
-        Response.Redirect("~/Home.aspx");
+        Response.Redirect("~/MasterDash.aspx");
     }
 
     private void bindOwners()

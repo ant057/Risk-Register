@@ -66,21 +66,19 @@ body>#Header {height:14px;}
 	padding:10px;
 	}
 	
-.TitleBar
-{
+.TitleBar {
     border: thin solid #FFFFFF;
     font-family: 'Gill Sans MT';
-    font-size: large;
+    font-size: small;
     background-color: #013b82;
     color: #FFFFFF;
 }
-.SubTitle
-{
+.SubTitle {
     border: thin solid #013b82;
     font-family: 'Gill Sans MT';
     font-size: small;
     background-color: #d8d8d8;
-    font-weight: bold; /*#013b82*/
+    font-weight: normal; /*#013b82*/
 }
 .DataCell {
     border: thin solid #CCCCCC;

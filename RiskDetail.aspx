@@ -66,7 +66,7 @@
             <tr>
                 <td class="TitleBar">
 
-                                    <asp:Label ID="Label25" runat="server" Font-Bold="True" Font-Size="Large" 
+                                    <asp:Label ID="Label25" runat="server" Font-Bold="False" Font-Size="Small" 
                                         Text="Risk Entities"></asp:Label>
 
                 </td>
@@ -87,7 +87,7 @@
                     <table width="100%">
                         <tr>
                             <td colspan ="2" class="TitleBar">
-                                    <asp:Label ID="Label11" runat="server" Font-Bold="True" Font-Size="Large" 
+                                    <asp:Label ID="Label11" runat="server" Font-Bold="False" Font-Size="Small" 
                                         Text="Risk Details"></asp:Label>
                              </td>
                         </tr>
@@ -236,7 +236,7 @@
                         <table width="100%">
                               <tr>
                                   <td colspan="2" class="TitleBar">
-                                    <asp:Label ID="Label10" runat="server" Text="Risk Scenario" Font-Bold="True" Font-Size="Large"></asp:Label>
+                                    <asp:Label ID="Label10" runat="server" Text="Risk Scenario" Font-Bold="False" Font-Size="Small"></asp:Label>
                                   </td>
                              </tr>
                               <tr>
@@ -267,7 +267,7 @@
                         <table width="100%">
                             <tr>
                                 <td colspan="4" class="TitleBar" width="20%">
-                                    <asp:Label ID="Label95" runat="server" Font-Bold="True" Font-Size="Large" 
+                                    <asp:Label ID="Label95" runat="server" Font-Bold="False" Font-Size="Small" 
                                     Text="Inherent Risk Scoring:"></asp:Label>
                                     <asp:Label ID="entityTitleLabel" runat="server"></asp:Label>
                                 </td>
@@ -334,7 +334,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4" class="TitleBar" width="20%">
-                                    <asp:Label ID="Label12" runat="server" Font-Bold="True" Font-Size="Large" 
+                                    <asp:Label ID="Label12" runat="server" Font-Bold="False" Font-Size="Small" 
                                     Text="Controls / Residual Detail:"></asp:Label>
                                     &nbsp;<asp:Label ID="entityTitleLabel0" runat="server"></asp:Label>
                                 </td>
@@ -406,7 +406,7 @@
                             <tr>
                                 <td colspan="2" class="TitleBar">
 
-                                    <asp:Label runat="server" Font-Bold="True" Font-Size="Large" 
+                                    <asp:Label runat="server" Font-Bold="False" Font-Size="Small" 
                                         Text="Action Details:"></asp:Label>
                                 &nbsp;<asp:Label ID="entityTitleLabel1" runat="server"></asp:Label>
 

@@ -224,7 +224,7 @@ public partial class MasterDash : System.Web.UI.Page
         GridView1.DataBind();
 
     }
-	
+
 	private DataTable getRegisterData(int entityId)
 	{
         string connectionString = WebConfigurationManager.ConnectionStrings["RiskRegister"].ConnectionString;
@@ -274,7 +274,7 @@ public partial class MasterDash : System.Web.UI.Page
                 {
 					DataTable dtexcel;
 					dtexcel = dtRisk.Copy();
-				
+
                     Response.Clear();
                     Response.Charset = "";
                     Response.AddHeader("content-disposition", "attachment;filename=" + entityExportddl.SelectedItem.Text.ToString()  + "-RiskRegister.xls");
