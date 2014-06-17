@@ -17,6 +17,16 @@ public partial class AggregatedScores : System.Web.UI.Page
         {
             BindAggregateScores();
         }
+
+        if (editCheckBox.Checked == true) 
+        {
+            editGridView.CssClass = "";
+        }
+        else 
+        {
+            editGridView.CssClass = "invisible";
+        }
+        
     }
 
     private void BindAggregateScores()

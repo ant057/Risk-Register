@@ -226,3 +226,5 @@ background: silver;
 color: Black;
 }
 /*-----------------------------------------------------*/ 
+
+.invisible { display:none; }
