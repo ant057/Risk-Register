@@ -21,6 +21,9 @@
 &nbsp;<asp:GridView ID="AggregateScores" runat="server" CssClass="gridview" Width="50%">
     </asp:GridView>
     <br />
+    <asp:GridView ID="consolGridView" runat="server" CssClass="gridview" ShowHeader="False" Width="15%">
+    </asp:GridView>
+    <br />
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:RiskRegister %>" ProviderName="<%$ ConnectionStrings:RiskRegister.ProviderName %>" SelectCommand="dbo.Entity_CapitalSelectAll" SelectCommandType="StoredProcedure" UpdateCommand="[dbo].[Entity_CapitalUpdate]" UpdateCommandType="StoredProcedure">
     </asp:SqlDataSource>
     <asp:GridView ID="editGridView" CssClass="invisible" runat="server" AutoGenerateColumns="False" AutoGenerateEditButton="True" DataKeyNames="Entity_Name" DataSourceID="SqlDataSource1" EnableModelValidation="True">

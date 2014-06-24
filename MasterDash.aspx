@@ -121,7 +121,7 @@ function switchViews(obj)
                  </asp:TemplateField>
            </Columns>
         </asp:GridView>
-        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="Data Source=Antdawg\SQLExpress;Initial Catalog=RiskRegister;Integrated Security=True"
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:RiskRegister %>"
                 SelectCommand="EXEC [dbo].[MasterRiskAll] 'Business Unit'" SelectCommandType="Text">
         </asp:SqlDataSource>
 

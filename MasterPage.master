@@ -52,6 +52,9 @@
                             <asp:HyperLink ID="riskRegisterLink" runat="server" 
                                 NavigateUrl="~/AggregatedScores.aspx">Aggregated Scores</asp:HyperLink>
                                     </td>
+                                    <td>
+                                        <asp:HyperLink ID="auditLink" NavigateUrl="~/AuditReport.aspx" runat="server" Target="_blank">Audit History Report</asp:HyperLink>
+                                    </td>
                                 </tr>
                             </table>
                         </td>

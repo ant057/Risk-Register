@@ -8,6 +8,9 @@ using DataAccess.DataUtility;
 using DataAccess.Data;
 using DataAccess;
 using System.Data;
+using System.Data.SqlClient;
+using System.Data.SqlTypes;
+using System.Web.Configuration;
 
 public partial class AggregatedScores : System.Web.UI.Page
 {
@@ -37,6 +40,33 @@ public partial class AggregatedScores : System.Web.UI.Page
 
         AggregateScores.DataSource = scores;
         AggregateScores.DataBind();
+
+        SqlConnection conn = new SqlConnection(WebConfigurationManager.ConnectionStrings["RiskRegister"].ToString());
+        SqlCommand comm = new SqlCommand("dbo.GetConsolidatedAggregateScore", conn);
+        SqlDataAdapter ad = new SqlDataAdapter(comm);
+
+        DataTable consolScores = new DataTable();
+
+        try
+        {
+            conn.Open();
+
+            ad.Fill(consolScores);
+
+            if (scores != null)
+            {
+                consolGridView.DataSource = consolScores;
+                consolGridView.DataBind();
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+        finally
+        {
+            conn.Close();
+        }
     }
 
 }
