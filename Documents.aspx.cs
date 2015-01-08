@@ -20,6 +20,7 @@ public partial class Documents : System.Web.UI.Page
     {
         get
         {
+//            return (int)ViewState["RiskId"];
             return (int)ViewState["RiskId"];
         }
         set
