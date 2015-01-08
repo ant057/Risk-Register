@@ -271,13 +271,13 @@ public partial class RiskDetail : System.Web.UI.Page
         Entity entity = new Entity();
         entities = entity.SelectAllEntity();
 
-        foreach (EntityDetail entDetail in entities)
-        {
-            ListItem item = new ListItem();
-            item.Text = entDetail.EntityName.ToString();
-            item.Value = entDetail.EntityId.ToString();
-            entityCheckBoxList.Items.Add(item);
-        }
+        //foreach (EntityDetail entDetail in entities)
+        //{
+        //    ListItem item = new ListItem();
+        //    item.Text = entDetail.EntityName.ToString();
+        //    item.Value = entDetail.EntityId.ToString();
+        //    entityCheckBoxList.Items.Add(item);
+        //}
 
         risksTreeView.Nodes.Add(new TreeNode("RiskID-" + RiskId.ToString() , RiskId.ToString() , "~/Images/folder.png"));
 
@@ -300,13 +300,13 @@ public partial class RiskDetail : System.Web.UI.Page
 
             risksTreeView.Nodes[0].ChildNodes.Add(new TreeNode(entityNode, item.EntityRiskId.ToString(), "~/Images/folder.png", "~/RiskDetail.aspx?entityRiskId=" + item.EntityRiskId.ToString(), ""));
 
-            for (int i = 0; i < entityCheckBoxList.Items.Count; i++)
-            {
-                if (item.EntityId.ToString() == entityCheckBoxList.Items[i].Value)
-                {
-                    entityCheckBoxList.Items[i].Selected = true;
-                }
-            }
+            //for (int i = 0; i < entityCheckBoxList.Items.Count; i++)
+            //{
+            //    if (item.EntityId.ToString() == entityCheckBoxList.Items[i].Value)
+            //    {
+            //        entityCheckBoxList.Items[i].Selected = true;
+            //    }
+            //}
         }
 
         DataTable entityName = new DataTable();
@@ -316,7 +316,6 @@ public partial class RiskDetail : System.Web.UI.Page
 
         string theEntity = entityName.Rows[0]["Entity_Name"].ToString();
         entityTitleLabel.Text = theEntity;
-        entityTitleLabel0.Text = theEntity;
         entityTitleLabel1.Text = theEntity;
         entityLabel.Text = theEntity;
 

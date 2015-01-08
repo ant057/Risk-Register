@@ -63,7 +63,7 @@
 
                 </td>
             </tr>
-            <tr>
+<%--            <tr>
                 <td class="TitleBar">
 
                                     <asp:Label ID="Label25" runat="server" Font-Bold="False" Font-Size="Small" 
@@ -79,16 +79,25 @@
                                     </asp:CheckBoxList>
 
                 </td>
-            </tr>
+            </tr>--%>
         </table>
         <table width="100%">
             <tr>
-                <td width="45%">
+                <td width="10%" rowspan="5" dir="ltr" style="border-style: double" valign="top">
+
+                        <asp:TreeView ID="risksTreeView" runat="server" Font-Size="Smaller">
+                        </asp:TreeView>
+
+                </td>
+                <td width="70%">
                     <table width="100%">
                         <tr>
                             <td colspan ="2" class="TitleBar">
                                     <asp:Label ID="Label11" runat="server" Font-Bold="False" Font-Size="Small" 
                                         Text="Risk Details"></asp:Label>
+                             </td>
+                            <td class="TitleBar">
+                                    <asp:Label ID="Label10" runat="server" Text="Risk Scenario" Font-Bold="False" Font-Size="Small"></asp:Label>
                              </td>
                         </tr>
                         <tr>
@@ -111,9 +120,15 @@
 
 
                             </td>
-                            <td class="DataCell" width="75%">
+                            <td width="75%">
 
                                     <asp:Label ID="riskIdLabel" runat="server"></asp:Label>
+
+                            </td>
+                            <td class="DataCell" width="75%" rowspan="9">
+
+                                     <asp:TextBox ID="riskScenarioTextBox" runat="server" 
+                                                                Width="625px" TextMode="MultiLine" ReadOnly="True" Height="212px"></asp:TextBox>
 
                             </td>
                         </tr>
@@ -124,7 +139,7 @@
 
 
                             </td>
-                            <td class="DataCell" width="75%">
+                            <td width="75%">
 
                                     <asp:Label ID="entityLabel" runat="server"></asp:Label>
 
@@ -137,10 +152,9 @@
 
 
                             </td>
-                            <td class="DataCell" width="75%">
+                            <td width="75%">
 
-                                    <asp:DropDownList ID="ddlRiskType" runat="server" Enabled="False" 
-                                        Height="23px" DataSourceID="riskTypeDS" 
+                                    <asp:DropDownList ID="ddlRiskType" runat="server" Enabled="False" DataSourceID="riskTypeDS" 
                                         DataTextField="Risk_Type_Description" DataValueField="Risk_Type_ID" 
                                         onselectedindexchanged="ddlRiskType_SelectedIndexChanged" 
                                         AutoPostBack="True">
@@ -155,7 +169,7 @@
 
 
                             </td>
-                            <td class="DataCell" width="75%">
+                            <td width="75%">
 
                                     <asp:DropDownList ID="ddlRiskSource" runat="server" 
                                         Enabled="False">
@@ -169,7 +183,7 @@
                                     <asp:Label ID="Label8" runat="server" Text="Risk Date"></asp:Label>
 
                             </td>
-                            <td class="DataCell" width="75%">
+                            <td width="75%">
 
                                     <asp:TextBox ID="riskDateTextBox" runat="server" ReadOnly="True"></asp:TextBox>
 
@@ -181,7 +195,7 @@
                                     <asp:Label ID="Label89" runat="server" Text="Risk Entered By"></asp:Label>
 
                             </td>
-                            <td class="DataCell" width="75%">
+                            <td width="75%">
 
                                     <asp:Label ID="userLabel" runat="server"></asp:Label>
 
@@ -193,7 +207,7 @@
                                     <asp:Label ID="Label29" runat="server" Text="Primary Owner"></asp:Label>
 
                             </td>
-                            <td class="DataCell" width="75%">
+                            <td width="75%">
 
                                     <asp:DropDownList ID="ddlPrimaryOwner" runat="server" Enabled="False">
                                     </asp:DropDownList>
@@ -206,9 +220,9 @@
                                     <asp:Label runat="server" Text="Oversight Party"></asp:Label>
 
                             </td>
-                            <td class="DataCell" width="75%">
+                            <td width="75%">
 
-                                    <asp:DropDownList ID="ddlOversightParty" runat="server" Enabled="False" Width="400px">
+                                    <asp:DropDownList ID="ddlOversightParty" runat="server" Enabled="False">
                                     </asp:DropDownList>
 
                             </td>
@@ -219,7 +233,7 @@
                                     <asp:Label ID="Label96" runat="server" Text="Not Applicable"></asp:Label>
 
                             </td>
-                            <td class="DataCell" width="75%">
+                            <td width="75%">
 
                     <asp:CheckBox ID="naCheckBox" runat="server" AutoPostBack="True" 
                         Enabled="False" oncheckedchanged="naCheckBox_CheckedChanged" />
@@ -231,54 +245,41 @@
                 <td width="1%">
                     
                 </td>
-                <td width="45%">
-                    <asp:Panel runat="server" Height="275px">
-                        <table width="100%">
-                              <tr>
-                                  <td colspan="2" class="TitleBar">
-                                    <asp:Label ID="Label10" runat="server" Text="Risk Scenario" Font-Bold="False" Font-Size="Small"></asp:Label>
-                                  </td>
-                             </tr>
-                              <tr>
-                                  <td>
-                                     <asp:TextBox ID="riskScenarioTextBox" runat="server" Height="235px" 
-                                                                Width="625px" TextMode="MultiLine" ReadOnly="True"></asp:TextBox>
-                                  </td>
-                              </tr>
-                        </table>
-                    </asp:Panel>
-                    
-                </td>
-                <td width="9%">
+                <td width="1%">
+                        &nbsp;</td>
+                <td width="1%">
                     
                 </td>
             </tr>
-
-            </table>
-        <table width="100%">
             <tr>
-                <td width="2%">
-                    <asp:Panel runat="server" Height="585px" BorderColor="#013B82" BorderStyle="Solid">
-                        <asp:TreeView ID="risksTreeView" runat="server">
-                        </asp:TreeView>
-                    </asp:Panel>
-                </td>
-                <td width="45%">
-                        <table width="100%">
-                            <tr>
-                                <td colspan="4" class="TitleBar" width="20%">
+                <td width="70%">
+                    &nbsp;</td>
+                <td width="1%">
+                    
+                    &nbsp;</td>
+                <td width="1%">
+                        &nbsp;</td>
+                <td width="1%">
+                    
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td width="70%">
+                    <table width="60%">
+                        <tr>
+                            <td class="TitleBar" colspan="4">
                                     <asp:Label ID="Label95" runat="server" Font-Bold="False" Font-Size="Small" 
                                     Text="Inherent Risk Scoring:"></asp:Label>
                                     <asp:Label ID="entityTitleLabel" runat="server"></asp:Label>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td width="20%" class="SubTitle">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle">
                                     <asp:Label ID="Label14" runat="server" Text="Frequency"></asp:Label>
                                     <asp:ImageButton ID="defImageButton1" runat="server" Height="17px" 
                                     ImageUrl="~/QuestionMark.jpg" Width="23px" onclientclick="definitions();" />
                                 </td>
-                                <td width="100%" class="DataCell" colspan="3">
+                            <td>
                                     <asp:DropDownList ID="frequencyTextBox" runat="server" AutoPostBack="True" 
                                         Enabled="False" Height="22px" 
                                         onselectedindexchanged="frequencyTextBox_SelectedIndexChanged">
@@ -289,231 +290,253 @@
                                         <asp:ListItem Value="4">4 - Frequent</asp:ListItem>
                                     </asp:DropDownList>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td width="20%" class="SubTitle">
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="SubTitle">
                                     <asp:Label ID="Label15" runat="server" Text="Severity"></asp:Label>
                                     <asp:ImageButton ID="defImageButton2" runat="server" Height="17px" 
                                     ImageUrl="~/QuestionMark.jpg" Width="23px" onclientclick="definitions();" />
                                 </td>
-                                <td width="100%" class="DataCell">
+                            <td>
                                     <asp:DropDownList ID="severityTextBox" runat="server" 
                                         AutoPostBack="True" Enabled="False" Height="22px" 
                                         onselectedindexchanged="severityTextBox_SelectedIndexChanged">
                                     </asp:DropDownList>
                                 </td>
-                                <td id="calcIVlbltd" class="SubTitle">
+                            <td class="SubTitle">
 
                                     <asp:Label ID="Label97" runat="server" Text="Calculated Value"></asp:Label>
 
                                 </td>
-                                <td id="calcIVtd" class="DataCell">
+                            <td>
 
                                     <asp:Label ID="calcIValueLabel" runat="server"></asp:Label>
 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td width="20%" class="SubTitle">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle">
                                     <asp:Label ID="Label9" runat="server" Text="Inherent Risk Score"></asp:Label>
                                 </td>
-                                <td width="100%" class="DataCell">
+                            <td>
                                     <asp:TextBox ID="riskScoreTextBox" runat="server" ReadOnly="True" 
                                         Font-Bold="True"></asp:TextBox>
                                 </td>
-                                <td id="calcISlbltd" class="SubTitle">
+                            <td class="SubTitle">
 
                                     <asp:Label ID="Label98" runat="server" Text="Calculated Score"></asp:Label>
 
                                 </td>
-                                <td id="calcIStd" class="DataCell">
+                            <td>
 
                                     <asp:Label ID="calcIScoreLabel" runat="server"></asp:Label>
 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="TitleBar" width="20%">
-                                    <asp:Label ID="Label12" runat="server" Font-Bold="False" Font-Size="Small" 
-                                    Text="Controls / Residual Detail:"></asp:Label>
-                                    &nbsp;<asp:Label ID="entityTitleLabel0" runat="server"></asp:Label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle" width="20%">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle">
                                     <asp:Label ID="Label16" runat="server" Text="Mitigating Controls / Actions"></asp:Label>
                                 </td>
-                                <td class="DataCell" width="100%" colspan="3">
+                            <td colspan="3">
                                     <FTB:FreeTextBox id="mitigatingControlsFTB" runat="Server" 
-                        AllowHtmlMode="False" ReadOnly="False" Height="250px" Width="500px" />
+                        AllowHtmlMode="False" ReadOnly="False" />
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle" width="20%">
+                        </tr>
+                        <tr>
+                            <td colspan="4">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="TitleBar" colspan="4">
+                                    <asp:Label ID="Label12" runat="server" Font-Bold="False" Font-Size="Small" 
+                                    Text="Controls / Residual Detail:"></asp:Label>
+                                    </td>
+                        </tr>
+                        <tr>
+                            <td class="SubTitle">
                                     <asp:Label ID="Label17" runat="server" Text="Adjustment"></asp:Label>
-                                    &nbsp;<asp:ImageButton ID="defImageButton" runat="server" Height="17px" 
+                                    <asp:ImageButton ID="defImageButton" runat="server" Height="17px" 
                                     ImageUrl="~/QuestionMark.jpg" Width="23px" 
                                     onclientclick="definitions();" />
                                 </td>
-                                <td class="DataCell" width="100%">
+                            <td>
+
                                     <asp:DropDownList ID="residualAdjustmentDDL" runat="server" AutoPostBack="True" 
                                     Enabled="False" 
                                     onselectedindexchanged="residualAdjustmentDDL_SelectedIndexChanged">
                                     </asp:DropDownList>
-                                </td>
-                                <td id="calcRVlbltd" class="SubTitle">
+
+                            </td>
+                            <td class="SubTitle">
 
                                     <asp:Label ID="Label99" runat="server" Text="Calculated Value"></asp:Label>
 
-                                </td>
-                                <td id="calcRVtd" class="DataCell">
+                            </td>
+                            <td>
 
                                     <asp:Label ID="calcRValueLabel" runat="server"></asp:Label>
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle" width="20%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="SubTitle">
                                     <asp:Label ID="Label21" runat="server" Text="Residual Risk Score"></asp:Label>
                                 </td>
-                                <td class="DataCell" width="100%">
+                            <td>
+
                                     <asp:TextBox ID="residualScoreText" runat="server" ReadOnly="True" 
                                     Width="146px" Font-Bold="True"></asp:TextBox>
-                                </td>
-                                <td id="calcRSlbltd" class="SubTitle">
+
+                            </td>
+                            <td class="SubTitle">
 
                                     <asp:Label ID="Label100" runat="server" Text="Calculated Score"></asp:Label>
 
-                                </td>
-                                <td id="calcRStd" class="DataCell">
+                            </td>
+                            <td>
 
                                     <asp:Label ID="calcRScoreLabel" runat="server"></asp:Label>
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="20%"></td>
-                                <td width="100%"></td>
-                            </tr>
+                            </td>
+                        </tr>
                         </table>
-                </td>                
-                <td width="1%">
-
                 </td>
-                <td width="45%">
-                    <asp:Panel runat="server" Height="585px">
-                        <table width="100%">
-                            <tr>
-                                <td colspan="2" class="TitleBar">
+                <td width="1%">
+                    
+                    &nbsp;</td>
+                <td width="1%">
+                        &nbsp;</td>
+                <td width="1%">
+                    
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td width="70%">
+                    &nbsp;</td>
+                <td width="1%">
+                    
+                    &nbsp;</td>
+                <td width="1%">
+                        &nbsp;</td>
+                <td width="1%">
+                    
+                    &nbsp;</td>
+            </tr>
+            <tr>
+                <td width="70%">
+                    <table width="60%">
+                        <tr>
+                            <td class="TitleBar" colspan="2" width="20%">
 
                                     <asp:Label runat="server" Font-Bold="False" Font-Size="Small" 
                                         Text="Action Details:"></asp:Label>
-                                &nbsp;<asp:Label ID="entityTitleLabel1" runat="server"></asp:Label>
+                                <asp:Label ID="entityTitleLabel1" runat="server"></asp:Label>
 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
+                        </tr>
+                        <tr>
+                            <td colspan="2" width="20%">
 
                     <asp:Button ID="createActionButton" runat="server" Text="Create Action Plan" 
                         onclick="createActionButton_Click" 
                             OnClientClick="return confirm('Are you sure you wish to create an Action Plan?');" 
                             CssClass="flatbutton" Width="116px"/>
-                        <asp:Button ID="actionHistoryButton" runat="server" Text="Action Plan History" 
+                        &nbsp;<asp:Button ID="actionHistoryButton" runat="server" Text="Action Plan History" 
                             Width="121px" CssClass="flatbutton" OnClick="actionHistoryButton_Click" />
 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle" width="20%">
 
                                     <asp:Label runat="server" Text="Action Details"></asp:Label>
 
                                 </td>
-                                <td class="DataCell" width="500px">
+                            <td>
 
                                     <asp:TextBox ID="actionDetailTextBox" runat="server" Height="130px" Width="400px" 
                                                     TextMode="MultiLine" ReadOnly="True"></asp:TextBox>
 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle" width="20%">
 
                                                 <asp:Label ID="Label91" runat="server" Text="Action Created Date"></asp:Label>
 
                                 </td>
-                                <td class="DataCell" width="500px">
+                            <td>
 
                                                 <asp:TextBox ID="actionCreatedTextBox" runat="server"></asp:TextBox>
 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle" width="20%">
 
                                                 <asp:Label ID="Label92" runat="server" Text="Action Entered By"></asp:Label>
 
                                 </td>
-                                <td class="DataCell" width="500px">
+                            <td>
 
                                                 <asp:Label ID="actionUserLabel" runat="server"></asp:Label>
 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle" width="20%">
 
                                         <asp:Label ID="Label28" runat="server" Text="Action Owner"></asp:Label>
 
                                 </td>
-                                <td class="DataCell" width="500px">
+                            <td>
 
                                         <asp:DropDownList ID="ddlActionOwner" runat="server" Enabled="False">
                                         </asp:DropDownList>
 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle" width="20%">
 
                                     <asp:Label ID="partyLabel" runat="server" Text="Follow Up Party"></asp:Label>
 
                                 </td>
-                                <td class="DataCell" width="500px">
+                            <td>
 
                                                 <asp:DropDownList ID="ddlFollowUpParty" runat="server" Enabled="False">
                                                 </asp:DropDownList>
 
                                 </td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle" width="20%">
 
                                     <asp:Label ID="implementLabel" runat="server" Text="Implementation Date"></asp:Label>
 
                                 </td>
-                                <td class="DataCell" width="500px">
+                            <td>
 
                                     <input ID="implementDateTextBox" runat="server" readonly="readonly" /></td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle" width="20%">
 
                                     <asp:Label ID="completeLabel" runat="server" Text="Completion Date"></asp:Label>
 
                                 </td>
-                                <td class="DataCell" width="500px">
+                            <td>
 
                         <input id="completedDateTextBox" runat="server" type="text" readonly="readonly"/></td>
-                            </tr>
-                            <tr>
-                                <td class="SubTitle">
+                        </tr>
+                        <tr>
+                            <td class="SubTitle" width="20%">
 
                                                 <asp:Label ID="Label26" runat="server" Text="Action Plan Status"></asp:Label>
 
                                 </td>
-                                <td class="DataCell" width="500px">
+                            <td>
 
                                                 <asp:DropDownList ID="ddlActionStatus" runat="server" Height="23px" 
                                                     Width="136px" Enabled="False">
@@ -524,55 +547,23 @@
                                                 </asp:DropDownList>
 
                                 </td>
-                            </tr>
-                        </table>
-                    </asp:Panel>
-                </td>
-                <td>
-
-                </td>
-            </tr>
-            <tr>
-                <td width="2%">
-
-                </td>
-                <td width="45%">
-
+                        </tr>
+                        <tr>
+                            <td width="20%">&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
                 </td>
                 <td width="1%">
-
-                </td>
-                <td width="45%">
-
-                </td>
-                <td width="30%">
-
-                </td>
-                <td>
-
+                    
                     &nbsp;</td>
-            </tr>
-            <tr>
-                <td width="2%">
-
-                </td>
-                <td width="45%">
-
-                </td>
                 <td width="1%">
-
-                </td>
-                <td width="45%">
-
-                </td>
-                <td width="30%">
-
-                </td>
-                <td>
-
+                        &nbsp;</td>
+                <td width="1%">
+                    
                     &nbsp;</td>
             </tr>
-        </table>
+            </table>
 
         <!-- begin bad table-->
         <table class="DataTable">

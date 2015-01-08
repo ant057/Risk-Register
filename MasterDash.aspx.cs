@@ -202,6 +202,8 @@ public partial class MasterDash : System.Web.UI.Page
 
             gv.DataSource = dbSrc;
             gv.DataBind();
+
+            e.Row.Cells[1].Visible = false;
         }
     }
 
