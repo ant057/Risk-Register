@@ -181,6 +181,22 @@ public partial class RiskDetail : System.Web.UI.Page
                 calcRValueLabel.Text = consolidatedScore.Rows[0]["Residual_Risk_Value"].ToString();
                 calcRScoreLabel.Text = consolidatedScore.Rows[0]["Residual_Risk_Score"].ToString();
             }
+
+            Label14.Visible = false;
+            Label15.Visible = false;
+            severityTextBox.Visible = false;
+            frequencyTextBox.Visible = false;
+            residualAdjustmentDDL.Visible = false;
+            Label17.Visible = false;
+
+            ddlRiskScore.SelectedValue = riskScoreTextBox.Text;
+            ddlResidualScore.SelectedValue = residualScoreText.Text;
+
+            riskScoreTextBox.Visible = false;
+            residualScoreText.Visible = false;
+            ddlRiskScore.Visible = true;
+            ddlResidualScore.Visible = true;
+
         }
         else
         {
@@ -383,6 +399,12 @@ public partial class RiskDetail : System.Web.UI.Page
         mitigatingControlsFTB.ReadOnly = false;
         naCheckBox.Enabled = true;
 
+        if (entityTitleLabel.Text == "Consolidated Business Unit")
+        {
+            ddlResidualScore.Enabled = true;
+            ddlRiskScore.Enabled = true;
+        }
+
         if (actionDetailTextBox.Text != "No Action Plan")
         {
             ddlActionStatus.Enabled = true;
@@ -435,10 +457,18 @@ public partial class RiskDetail : System.Web.UI.Page
                     entityRiskDetail.ModifiedUserID = User.Identity.Name.ToString();
                     entityRiskDetail.Frequency = int.Parse(frequencyTextBox.Text);
                     entityRiskDetail.Severity = int.Parse(severityTextBox.Text);
-                    entityRiskDetail.InherentRiskScore = riskScoreTextBox.Text.ToString();
+                    if (entityTitleLabel.Text == "Consolidated Business Unit")
+                    {
+                        entityRiskDetail.InherentRiskScore = ddlResidualScore.SelectedValue;
+                        entityRiskDetail.ResidualRiskScore = ddlResidualScore.SelectedValue;
+                    }
+                    else
+                    {
+                        entityRiskDetail.InherentRiskScore = riskScoreTextBox.Text.ToString();
+                        entityRiskDetail.ResidualRiskScore = residualScoreText.Text.ToString();
+                    }
                     entityRiskDetail.MitigatingActionsDetail = mitigatingControlsFTB.Text.ToString();
                     entityRiskDetail.ResidualAdjustment = int.Parse(residualAdjustmentDDL.SelectedValue);
-                    entityRiskDetail.ResidualRiskScore = residualScoreText.Text.ToString();
                     entityRiskDetail.ModifiedDate = DateTime.Now;
                     entityRiskDetail.PrimaryOwnerId = ddlPrimaryOwner.SelectedIndex == 0 ? 0 : int.Parse(ddlPrimaryOwner.SelectedValue);
                     entityRiskDetail.OversightPartyId = ddlOversightParty.SelectedIndex == 0 ? 0 : int.Parse(ddlOversightParty.SelectedValue);
@@ -587,6 +617,12 @@ public partial class RiskDetail : System.Web.UI.Page
                 saveButton.Visible = false;
                 editButton.Enabled = false;
                 cancelButton.Visible = false;
+
+                if (entityTitleLabel.Text == "Consolidated Business Unit")
+                {
+                    ddlResidualScore.Enabled = false;
+                    ddlRiskScore.Enabled = false;
+                }
 
                 riskUpdateLabel.Text = "Risk " + EntityRiskId.ToString() + " has been SUCCESSFULLY updated!";
                 riskUpdateLabel.ForeColor = System.Drawing.Color.Green;

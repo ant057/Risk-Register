@@ -63,7 +63,7 @@
 
                 </td>
             </tr>
-<%--            <tr>
+            <%--            <tr>
                 <td class="TitleBar">
 
                                     <asp:Label ID="Label25" runat="server" Font-Bold="False" Font-Size="Small" 
@@ -323,6 +323,12 @@
                             <td>
                                     <asp:TextBox ID="riskScoreTextBox" runat="server" ReadOnly="True" 
                                         Font-Bold="True"></asp:TextBox>
+                                    <asp:DropDownList ID="ddlRiskScore" runat="server" Visible="False" Enabled="False">
+                                        <asp:ListItem>LOW</asp:ListItem>
+                                        <asp:ListItem>MEDIUM</asp:ListItem>
+                                        <asp:ListItem>HIGH</asp:ListItem>
+                                        <asp:ListItem>CATASTROPHE</asp:ListItem>
+                                    </asp:DropDownList>
                                 </td>
                             <td class="SubTitle">
 
@@ -387,6 +393,13 @@
 
                                     <asp:TextBox ID="residualScoreText" runat="server" ReadOnly="True" 
                                     Width="146px" Font-Bold="True"></asp:TextBox>
+
+                                    <asp:DropDownList ID="ddlResidualScore" runat="server" Visible="False" Enabled="False">
+                                        <asp:ListItem>LOW</asp:ListItem>
+                                        <asp:ListItem>MEDIUM</asp:ListItem>
+                                        <asp:ListItem>HIGH</asp:ListItem>
+                                        <asp:ListItem>CATASTROPHE</asp:ListItem>
+                                    </asp:DropDownList>
 
                             </td>
                             <td class="SubTitle">
