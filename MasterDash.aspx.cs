@@ -204,6 +204,8 @@ public partial class MasterDash : System.Web.UI.Page
             gv.DataBind();
 
             e.Row.Cells[1].Visible = false;
+
+            
         }
     }
 
@@ -295,5 +297,17 @@ public partial class MasterDash : System.Web.UI.Page
                 Response.End();
             }
 
+    }
+
+    protected void GridView2_RowDataBound(object sender, GridViewRowEventArgs e)
+    {
+        if (e.Row.RowType == DataControlRowType.DataRow)
+        {
+            if (e.Row.Cells[1].Text.ToString().Equals("Consolidated Business Unit"))
+            {
+                e.Row.Cells[2].Text = "";
+                e.Row.Cells[3].Text = "";
+            }
+        }
     }
 }

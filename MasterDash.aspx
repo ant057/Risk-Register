@@ -97,7 +97,7 @@ function switchViews(obj)
                                         <asp:GridView ID="GridView2" runat="server" Width="80%"
                                             AutoGenerateColumns="false" DataKeyNames="EntityRiskID"
                                             EmptyDataText="No entities for this risk." 
-                                            CssClass="gridview" >
+                                            CssClass="gridview" OnRowDataBound="GridView2_RowDataBound" >
                                             <AlternatingRowStyle BackColor="Silver" />
                                             <RowStyle Font-Bold="true" />
                                             <Columns>
